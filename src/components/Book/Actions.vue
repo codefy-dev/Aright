@@ -15,7 +15,7 @@
             <q-form @submit="add"  class="q-gutter-xs">
                   <q-input outlined v-model="newLine.description" label="Descripción" required  />
                   <q-input outlined v-model.number="newLine.amount" label="Monto" required  type="number" />
-                  <q-select outlined v-model="newLine.channel" :options="channels" label="Tipo de Transacción" emit-value required />
+                  <q-select outlined v-model="newLine.channel" :options="channels" label="Tipo de Transacción" required />
               <q-card-actions align="right" >
                 <q-btn color="positive" label="Guardar" icon="save"  type="submit" />
               </q-card-actions>
@@ -29,7 +29,7 @@
 <script>
 import { ref } from 'vue'
 import { bookStore } from 'stores/book/'
-
+// para testing no borrar
 const bookLocal = [
     {
       "type": "outcome",
@@ -129,25 +129,28 @@ const bookLocal = [
     }
 ]
 
+const defaultLine = {
+      description: '',
+      amount: '',
+      type: 'income',
+      channel: { label: 'Transferencia', value: 'transfer' }
+    }
+const defaultChannels = [
+  { label: 'Transferencia', value: 'transfer' },
+  { label: 'Efectivo', value: 'cash' },
+  { label: 'Tarjeta de Crédito', value: 'credit_card' },
+  { label: 'Tarjeta de Débito', value: 'debit_card' },
+  { label: 'Cheque', value: 'check' },
+  { label: 'Otro', value: 'other' }
+]
+
 export default {
   name: 'income-outcome-btns',
   setup () {
     const book = bookStore()
     const addDialog = ref(false)
-    const newLine = ref({
-      description: '',
-      amount: '',
-      type: 'income',
-      channel: { label: 'Transferencia', value: 'transfer' }
-    })
-    const channels = [
-      { label: 'Efectivo', value: 'cash' },
-      { label: 'Transferencia', value: 'transfer' },
-      { label: 'Tarjeta de crédito', value: 'credit_card' },
-      { label: 'Tarjeta de débito', value: 'debit_card' },
-      { label: 'Cheque', value: 'check' },
-      { label: 'Otro', value: 'other' }
-    ]
+    const newLine = ref(defaultLine)
+    const channels = defaultChannels
     return {
       addDialog,
       newLine,
@@ -156,8 +159,9 @@ export default {
     }
   },
   methods: {
-    openAddDialog (type) {
-      this.newLine.type = type || 'income'
+    openAddDialog (type = 'income') {
+      this.newLine = defaultLine
+      this.newLine.type = type
       this.addDialog = true
     },
     acctionColor () {
@@ -173,27 +177,9 @@ export default {
       this.newLine.channel = this.newLine.channel.value
       this.book.addLine(this.newLine).then(() => {
         this.addDialog = false
-        this.newLine = {
-          description: '',
-          amount: '',
-          type: 'income',
-          channel: { label: 'Transferencia', value: 'transfer' }
-        }
+        this.newLine = defaultLine
       })
-    },
-    sleep(milliseconds) {
-      const date = Date.now();
-      let currentDate = null;
-      do {
-        currentDate = Date.now();
-      } while (currentDate - date < milliseconds);
     }
-  },
-  computed : {
-
-  },
-  mounted () {
-
   }
 }
 </script>
