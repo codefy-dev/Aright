@@ -90,6 +90,11 @@ module.exports = configure(function (/* ctx */) {
         }]
       ],
       env: require('dotenv').config().parsed,
+      extendViteConf (viteConf) {
+        if (ctx.mode.capacitor) {
+          // do something with ViteConf
+        }
+      }
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer

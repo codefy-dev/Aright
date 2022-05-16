@@ -1,0 +1,10 @@
+{
+  "appId": "org.qntas.qntas.app",
+  "appName": "Qntas App",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "www",
+  "server": {
+    "url": "http://192.168.100.18:9500"
+  }
+}

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Qntas App</string>
+    <string name="title_activity_main">Qntas App</string>
+    <string name="package_name">org.qntas.qntas.app</string>
+    <string name="custom_url_scheme">org.qntas.qntas.app</string>
+</resources>
