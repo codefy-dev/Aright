@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center" >
-    <div class="q-pa-md col-6" v-if="auth?.user.uid">
+    <div class="q-pa-md col-6" v-if="auth.user?.uid">
       <Actions />
       <List />
     </div>

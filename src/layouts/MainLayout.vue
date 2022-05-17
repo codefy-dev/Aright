@@ -6,7 +6,7 @@
           {{ title }}
         </q-toolbar-title>
         <q-btn
-          v-if="auth.user.uid"
+          v-if="auth.user?.uid"
           @click="auth.logout"
           class="absolute-right q-pr-sm"
           icon="logout"
