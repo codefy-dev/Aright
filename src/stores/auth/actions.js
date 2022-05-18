@@ -1,7 +1,6 @@
 import { firebaseAuth, firebaseSignIn, firebaseOnAuthStateChanged, firebaseApp, firebaseSignOut } from '../../boot/firebase';
-import { Notify, Loading, Dialog } from 'quasar'
-import { getFirestore, collection, getDoc, doc, setDoc } from 'firebase/firestore/lite';
-import { bookStore } from '../book/index.js'
+import { Notify, Loading } from 'quasar'
+import { getFirestore, getDoc, doc, setDoc } from 'firebase/firestore/lite';
 
 export default {
   login (payload) {
@@ -41,7 +40,11 @@ export default {
       this.user.data = docSnap.data()
     } else {
       usersRef = doc(db, "users", this.user.email)
-      this.user.data = {}
+      let data = {
+        books: [],
+      }
+      await setDoc(usersRef, data)
+      this.user.data = data
     }
 
   },
