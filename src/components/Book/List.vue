@@ -33,7 +33,6 @@
             {{ formatPrice(props.value,0) }}
         </q-td>
       </template>
-
     </q-table>
   </div>
 </template>
@@ -77,20 +76,19 @@ export default {
   },
   methods: {
     formatPrice(value, decimals = 2) {
-        let val = (value/1).toFixed(decimals).replace('.', ',')
-        // let val = (value/1).toFixed(0)
-        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-    }
+      let val = (value/1).toFixed(decimals).replace('.', ',')
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    },
+    async fetchBook () {
+      this.loading = true
+      await this.book.fetchBook()
+      this.loading = false
+    },
   },
   computed: {
   },
   mounted () {
-    this.loading = true
-    this.book.fetchBook().then(() => {
-      this.loading = false
-    }).catch(() => {
-      this.loading = false
-    })
+    this.fetchBook ()
   },
 }
 </script>

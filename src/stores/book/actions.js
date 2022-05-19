@@ -1,72 +1,36 @@
-import { firebaseApp } from '../../boot/firebase'
-import { Notify, Dialog, Loading, uid, date } from 'quasar'
-import { getDatabase, ref, get, set, onValue, push } from "firebase/database"
-import { authStore } from '../auth/index.js'
+import { firebaseDb } from '../../boot/firebase'
+import { Loading, uid, date } from 'quasar'
+import { collection, query, where, getDocs, doc, setDoc, orderBy } from "firebase/firestore";
+import { userStore } from '../user/index.js'
 
 export default {
-  fetchBook () {
-    return new Promise((resolve, reject) => {
-      Loading.show()
-      let db = getDatabase(firebaseApp);
-      let starCountRef = ref(db, 'book')
-      onValue(starCountRef, (snapshot) => {
-        let data = snapshot.val()
-        this.setBook(data)
-        Loading.hide()
-        resolve()
-      }, (error) => {
-        this.book = []
-        Loading.hide()
-        reject(error)
-      })
+  async fetchBook () {
+    Loading.show()
+    const storedUser = userStore()
+    let user = await storedUser.userInfo
+    let booksRef = collection(firebaseDb, "books")
+    let q = query(booksRef, where('uid_book', '==', user.activedBook), orderBy('created_at', 'desc'))
+    const bookSnaps = await getDocs(q)
+    this.book = []
+    bookSnaps.forEach((bookSnap) => {
+      this.book.push(bookSnap.data())
     })
+    Loading.hide()
   },
-  setBook (book) {
-    this.book = book ? Object.values(book).sort(function (a, b) {
-      // ordenando de forma decrescente
-      return new Date(b.created_at) - new Date(a.created_at);
-    }) : []
-  },
-  addLine (line) {
-    return new Promise((resolve, reject) => {
-      Loading.show()
-      const auth = authStore()
-      let db = getDatabase(firebaseApp)
-      let postListRef = ref(db, 'book')
-      let newPostRef = push(postListRef)
-      let data = {
-        id: uid(),
-        created_by: auth.user.uid,
-        created_at: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
-        balance: this.balance + (line.type === 'income' ? line.amount : -line.amount),
-        ...line
-      }
-      console.log('addLine data', data)
-      set(newPostRef, data).then(() => {
-        Loading.hide()
-        resolve()
-      }).catch((error) => {
-        Loading.hide()
-        reject(error)
-      })
-    })
-  },
-  addTenant () {
-    return new Promise((resolve, reject) => {
-      Loading.show()
-      let db = getDatabase(firebaseApp)
-      let postListRef = ref(db, 'tenants')
-      let newPostRef = push(postListRef)
-      set(newPostRef, {
-        created_at: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
-        book: {}
-      }).then((result) => {
-        Loading.hide()
-        resolve(result)
-      }).catch((error) => {
-        Loading.hide()
-        reject(error)
-      })
-    })
+  async addLine (line) {
+    const storedUser = userStore()
+    let user = await storedUser.userInfo
+    let id = uid()
+    let newLine = {
+      id,
+      uid_book: user.activedBook,
+      created_by: user.id,
+      created_at: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
+      balance: this.balance + (line.type === 'income' ? line.amount : -line.amount),
+      ...line,
+    }
+    let booksRef = doc(firebaseDb, "books", id)
+    await setDoc(booksRef, newLine)
+    await this.fetchBook()
   }
 }

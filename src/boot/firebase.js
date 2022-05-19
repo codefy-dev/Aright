@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 // Agregar configuración firebase:
 var firebaseConfig = {
@@ -18,5 +19,13 @@ const firebaseAuth = getAuth(firebaseApp)
 const firebaseSignIn = signInWithEmailAndPassword
 const firebaseOnAuthStateChanged = onAuthStateChanged
 const firebaseSignOut = signOut
+const firebaseDb = getFirestore(firebaseApp)
 
-export { firebaseAuth, firebaseSignIn, firebaseOnAuthStateChanged, firebaseApp, firebaseSignOut }
+export {
+  firebaseAuth,
+  firebaseSignIn,
+  firebaseOnAuthStateChanged,
+  firebaseApp,
+  firebaseSignOut,
+  firebaseDb
+}

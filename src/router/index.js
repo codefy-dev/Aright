@@ -28,8 +28,8 @@ export default route(function (/* { store, ssrContext } */) {
   })
 
   Router.beforeEach((to, from, next) => {
-    const storeAuth = authStore()
-    next(!storeAuth.user?.uid && to.name !== 'Auth' ? { name: 'Auth' } : null)
+    const auth = authStore()
+    next(!auth.user?.uid && to.name !== 'Auth' ? { name: 'Auth' } : null)
   })
 
   return Router
