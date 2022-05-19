@@ -17,7 +17,7 @@
                   <q-input outlined v-model.number="newLine.amount" label="Monto" required  type="number" />
                   <q-select outlined v-model="newLine.channel" :options="channels" label="Tipo de Transacción" required />
               <q-card-actions align="right" >
-                <q-btn color="positive" label="Guardar" icon="save"  type="submit" />
+                <q-btn color="positive" label="Guardar" icon="save"  type="submit" :loading="loading" />
               </q-card-actions>
             </q-form>
           </q-card-section>
@@ -45,67 +45,19 @@ const bookLocal = [
     },
     {
       "type": "outcome",
-      "description": "Compra Cebada",
+      "description": "Compra Comida",
       "channel": "transfer",
       "amount": 25000
     },
     {
       "type": "outcome",
-      "description": "Compra Lupulo",
+      "description": "Compra Frutas",
       "channel": "transfer",
       "amount": 15000
     },
     {
       "type": "outcome",
-      "description": "Compra Fermentador",
-      "channel": "transfer",
-      "amount": 250000
-    },
-    {
-      "type": "income",
-      "description": "Capital Inicial",
-      "channel": "transfer",
-      "amount": 1000000
-    },
-    {
-      "type": "outcome",
-      "description": "Compra Cebada",
-      "channel": "transfer",
-      "amount": 25000
-    },
-   {
-      "type": "outcome",
-      "description": "Compra Lupulo",
-      "channel": "transfer",
-      "amount": 15000
-    },
-    {
-      "type": "outcome",
-      "description": "Compra Fermentador",
-      "channel": "transfer",
-      "amount": 250000
-    },
-    {
-      "type": "income",
-      "description": "Capital Inicial",
-      "channel": "transfer",
-      "amount": 1000000
-    },
-    {
-      "type": "outcome",
-      "description": "Compra Cebada",
-      "channel": "transfer",
-      "amount": 25000
-    },
-    {
-      "type": "outcome",
-      "description": "Compra Lupulo",
-      "channel": "transfer",
-      "amount": 15000
-    },
-    {
-      "type": "outcome",
-      "description": "Compra Fermentador",
+      "description": "Compra Licores",
       "channel": "transfer",
       "amount": 250000
     },
@@ -113,17 +65,65 @@ const bookLocal = [
       "type": "income",
       "description": "Capital",
       "channel": "transfer",
-      "amount": 1000000,
+      "amount": 1000000
     },
     {
       "type": "outcome",
-      "description": "Compra Cebada",
+      "description": "Compra Ropa",
+      "channel": "transfer",
+      "amount": 25000
+    },
+   {
+      "type": "outcome",
+      "description": "Cine",
+      "channel": "transfer",
+      "amount": 15000
+    },
+    {
+      "type": "outcome",
+      "description": "Gasolina",
+      "channel": "transfer",
+      "amount": 250000
+    },
+    {
+      "type": "income",
+      "description": "Cobro de factura",
+      "channel": "transfer",
+      "amount": 1000000
+    },
+    {
+      "type": "outcome",
+      "description": "Alquiler",
       "channel": "transfer",
       "amount": 25000
     },
     {
       "type": "outcome",
-      "description": "Compra Lupulo",
+      "description": "Luz y Agua",
+      "channel": "transfer",
+      "amount": 15000
+    },
+    {
+      "type": "outcome",
+      "description": "Teatro",
+      "channel": "transfer",
+      "amount": 250000
+    },
+    {
+      "type": "income",
+      "description": "Sueldo",
+      "channel": "transfer",
+      "amount": 1000000,
+    },
+    {
+      "type": "outcome",
+      "description": "Cena",
+      "channel": "transfer",
+      "amount": 25000
+    },
+    {
+      "type": "outcome",
+      "description": "Prestamo",
       "channel": "transfer",
       "amount": 15000
     }
@@ -151,11 +151,13 @@ export default {
     const addDialog = ref(false)
     const newLine = ref(defaultLine)
     const channels = defaultChannels
+    const loading = ref(false)
     return {
       addDialog,
       newLine,
       channels,
       book,
+      loading
     }
   },
   methods: {
@@ -173,13 +175,22 @@ export default {
     actionTitle () {
       return 'income' === this.newLine.type ? 'Entrada' : 'Salida'
     },
-    add () {
-      this.newLine.channel = this.newLine.channel.value
-      this.book.addLine(this.newLine).then(() => {
-        this.addDialog = false
-        this.newLine = defaultLine
-      })
+    async add () {
+      this.newLine.channel = this.newLine.channel?.value || this.newLine.channel
+      this.loading = true
+      await this.book.addLine(this.newLine)
+      this.loading = false
+      this.addDialog = false
+      this.newLine = defaultLine
     }
+  },
+  mounted () {
+    // for (let i = 1; i < bookLocal.length; i++ ) {
+    //     setTimeout(()=>{
+    //       this.newLine = bookLocal[i]
+    //       this.add()
+    //   },i * 2000);
+    // }
   }
 }
 </script>

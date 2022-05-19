@@ -21,16 +21,21 @@
         <div class="text-small text-grey">
           Disponibles
         </div>
-        <q-chip size="md" icon="attach_money">{{ formatPrice(book.balance) }}</q-chip>
+        <q-chip size="md" icon="attach_money">{{ $filters.money(book.balance) }}</q-chip>
+      </template>
+      <template v-slot:body-cell-created_at="props">
+        <q-td :props="props" >
+          <small class="text-grey">{{ $filters.dateOrTime(props.value) }}</small>
+        </q-td>
       </template>
       <template v-slot:body-cell-amount="props">
         <q-td :props="props" :class="[props.row.type === 'income' ? 'text-positive' : 'text-negative']">
-            {{ formatPrice(props.value,0) }}
+            {{ $filters.money(props.value) }}
         </q-td>
       </template>
       <template v-slot:body-cell-balance="props">
         <q-td :props="props" :class="[props.value > 0 ? 'text-positive' : 'text-negative']">
-            {{ formatPrice(props.value,0) }}
+            {{ $filters.money(props.value) }}
         </q-td>
       </template>
     </q-table>
@@ -75,10 +80,6 @@ export default {
     }
   },
   methods: {
-    formatPrice(value, decimals = 2) {
-      let val = (value/1).toFixed(decimals).replace('.', ',')
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-    },
     async fetchBook () {
       this.loading = true
       await this.book.fetchBook()
@@ -88,8 +89,8 @@ export default {
   computed: {
   },
   mounted () {
-    this.fetchBook ()
-  },
+    this.fetchBook()
+  }
 }
 </script>
 

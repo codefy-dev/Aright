@@ -1,4 +1,4 @@
-import { firebaseAuth, firebaseSignIn, firebaseOnAuthStateChanged, firebaseApp, firebaseSignOut } from '../../boot/firebase';
+import { firebaseAuth, firebaseSignIn, firebaseOnAuthStateChanged, firebaseSignOut } from '../../boot/firebase';
 import { Notify, Loading } from 'quasar'
 
 export default {

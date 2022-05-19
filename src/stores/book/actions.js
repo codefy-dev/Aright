@@ -18,6 +18,7 @@ export default {
     Loading.hide()
   },
   async addLine (line) {
+    Loading.show()
     const storedUser = userStore()
     let user = await storedUser.userInfo
     let id = uid()
@@ -26,11 +27,13 @@ export default {
       uid_book: user.activedBook,
       created_by: user.id,
       created_at: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
-      balance: this.balance + (line.type === 'income' ? line.amount : -line.amount),
+      balance: parseInt(this.balance) + parseInt(line.type === 'income' ? line.amount : line.amount * -1),
       ...line,
     }
     let booksRef = doc(firebaseDb, "books", id)
+    console.log(booksRef, newLine, line)
     await setDoc(booksRef, newLine)
     await this.fetchBook()
+    Loading.hide()
   }
 }
