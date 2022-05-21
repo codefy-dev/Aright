@@ -31,7 +31,6 @@ export default {
       ...line,
     }
     let booksRef = doc(firebaseDb, "books", id)
-    console.log(booksRef, newLine, line)
     await setDoc(booksRef, newLine)
     await this.fetchBook()
     Loading.hide()
