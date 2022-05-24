@@ -1,6 +1,6 @@
 import { firebaseDb } from '../../boot/firebase'
-import { Loading, uid, date } from 'quasar'
-import { collection, query, getDocs, doc, setDoc, orderBy, addDoc } from "firebase/firestore";
+import { Loading, date } from 'quasar'
+import { collection, query, getDocs, orderBy, addDoc } from "firebase/firestore";
 import { userStore } from '../user/index.js'
 
 export default {
@@ -29,16 +29,14 @@ export default {
         name: 'Personal'
       })
     }
-    let id = uid()
     let newLine = {
-      id,
       created_by: user.id,
       created_at: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
       balance: parseInt(this.balance) + parseInt(line.type === 'income' ? line.amount : line.amount * -1),
       ...line,
     }
-    let booksRef = doc(firebaseDb, 'books', user.activedBook, 'lines', id)
-    await setDoc(booksRef, newLine)
+    let bookCollection = collection(firebaseDb, 'books', user.activedBook, 'lines')
+    await addDoc(bookCollection, newLine)
     await this.fetchBook()
     Loading.hide()
   },
