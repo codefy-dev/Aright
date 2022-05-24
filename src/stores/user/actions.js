@@ -8,7 +8,7 @@ export default {
     Loading.show()
     const auth = authStore()
     if (auth.user?.uid) {
-      let usersRef = doc(firebaseDb, "users", auth.user.uid)
+      let usersRef = doc(firebaseDb, 'users', auth.user.uid)
       const docSnap = await getDoc(usersRef)
       if (docSnap.exists()) {
         let data = docSnap.data()
@@ -19,7 +19,7 @@ export default {
           email: auth.user.email,
           photoURL: auth.user.photoURL,
           phoneNumber: auth.user.phoneNumber,
-          activedBook: [...books.values()].find(book => book.active).uid,
+          activedBook: [...books.values()].find(book => book.active)?.uid,
           ...data
         }
       } else {
@@ -38,17 +38,21 @@ export default {
         email: auth.user.email,
         photoURL: auth.user.photoURL,
         phoneNumber: auth.user.phoneNumber,
-        books: {
-          [auth.user.uid]: {
-            uid: auth.user.uid,
-            active: true,
-          }
-        }
+        books: {}
       }
-      let usersRef = doc(firebaseDb, "users", auth.user.uid)
+      let usersRef = doc(firebaseDb, 'users', auth.user.uid)
       await setDoc(usersRef, data)
       this.user = data
     }
     Loading.hide()
+  },
+  async updateUser () {
+    const auth = authStore()
+    if (auth.user?.uid) {
+      Loading.show()
+      let usersRef = doc(firebaseDb, 'users', auth.user.uid)
+      await setDoc(usersRef, this.user)
+      Loading.hide()
+    }
   }
 }
