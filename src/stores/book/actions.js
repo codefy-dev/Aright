@@ -1,23 +1,30 @@
 import { firebaseDb } from '../../boot/firebase'
 import { Loading, date } from 'quasar'
-import { collection, query, getDocs, orderBy, addDoc } from "firebase/firestore";
+import { collection, query, getDocs, orderBy, addDoc, limit, startAfter } from "firebase/firestore";
 import { userStore } from '../user/index.js'
 
 export default {
-  async fetchBook () {
+  async fetchPage () {
     Loading.show()
     const storedUser = userStore()
     let user = await storedUser.userInfo
-    this.book = []
-    if (!user.activedBook) {
-      return
+    if (user.activedBook) {
+      let booksRef = collection(firebaseDb, 'books', user.activedBook, 'lines')
+      let q = this.pagination.page > 1 && this.pagination.pages[this.pagination.page] !== undefined ?
+        query(booksRef, orderBy('created_at', 'desc'), limit(10), startAfter(this.pagination.pages[this.pagination.page])) :
+        query(booksRef, orderBy('created_at', 'desc'), limit(10));
+      const bookSnaps = await getDocs(q)
+      let book = []
+      if (!bookSnaps.empty) {
+        this.pagination.pages[this.pagination.page + 1] = bookSnaps.docs[bookSnaps.docs.length - 1]
+        bookSnaps.forEach(bookSnap => book.push(bookSnap.data()))
+        this.book = book
+        this.pagination.lastPage = bookSnaps.size < 10
+      } else {
+        this.pagination.page = this.pagination.page !== 1 ? this.pagination.page - 1 : 1
+        this.pagination.lastPage = true
+      }
     }
-    let booksRef = collection(firebaseDb, 'books', user.activedBook, 'lines')
-    let q = query(booksRef, orderBy('created_at', 'desc'))
-    const bookSnaps = await getDocs(q)
-    bookSnaps.forEach((bookSnap) => {
-      this.book.push(bookSnap.data())
-    })
     Loading.hide()
   },
   async addLine (line) {
@@ -25,9 +32,7 @@ export default {
     const storedUser = userStore()
     let user = await storedUser.userInfo
     if (!user.activedBook) {
-      await this.addBook({
-        name: 'Personal'
-      })
+      await this.addBook({ name: 'Personal' })
     }
     let newLine = {
       created_by: user.id,
@@ -37,7 +42,8 @@ export default {
     }
     let bookCollection = collection(firebaseDb, 'books', user.activedBook, 'lines')
     await addDoc(bookCollection, newLine)
-    await this.fetchBook()
+    this.pagination.page = 0
+    await this.fetchPage()
     Loading.hide()
   },
   async addBook (book) {
@@ -61,5 +67,17 @@ export default {
     await storedUser.updateUser()
     this.book = []
     Loading.hide()
-  }
+  },
+  async nextPage () {
+    this.pagination.page++
+    await this.fetchPage()
+  },
+  async prevPage () {
+    this.pagination.page--
+    await this.fetchPage()
+  },
+  async firstPage () {
+    this.pagination.page = 1
+    await this.fetchPage()
+  },
 }

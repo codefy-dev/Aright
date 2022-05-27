@@ -18,7 +18,6 @@ export default ({ app }) => {
       let val = (value / 1).toFixed(decimals).replace('.', ',')
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     },
-    // show hour and minutes if the value is from today else show only date
     dateOrTime: (val) => {
       let today = new Date()
       val = date.extractDate(val, 'YYYY-MM-DD HH:mm:ss')

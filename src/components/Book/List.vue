@@ -1,73 +1,105 @@
 <template>
-   <div >
-    <q-table
-      :rows="book.book"
-      :columns="columns"
-      row-key="id"
-      :loading="loading"
-      :filter="filter"
-      binary-state-sort
-      :pagination="{rowsPerPage: 10}"
-    >
-    <!-- @request="onRequest" -->
-      <template v-slot:top-right>
-        <q-input borderless dense debounce="300" v-model="filter" placeholder="Busqueda">
-          <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-        </q-input>
-      </template>
-      <template v-slot:top-left>
-        <div class="text-small text-grey">
-          Disponibles
-        </div>
-        <q-chip size="md" icon="attach_money">{{ $filters.money(book.balance) }}</q-chip>
-      </template>
-      <template v-slot:body-cell-created_at="props">
-        <q-td :props="props" >
-          <small class="text-grey">{{ $filters.dateOrTime(props.value) }}</small>
-        </q-td>
-      </template>
-      <template v-slot:body-cell-amount="props">
-        <q-td :props="props" :class="[props.row.type === 'income' ? 'text-positive' : 'text-negative']">
-            {{ $filters.money(props.value) }}
-        </q-td>
-      </template>
-      <template v-slot:body-cell-balance="props">
-        <q-td :props="props" :class="[props.value > 0 ? 'text-positive' : 'text-negative']">
-            {{ $filters.money(props.value) }}
-        </q-td>
-      </template>
-    </q-table>
+  <div style="width: 100%" class="rounded-borders bg-white q-my-md">
+    <Actions />
+    <q-list bordered separator dense class="col-12">
+      <q-item class="justify-between">
+        <q-item-section  top class="col-2">
+          <q-item-label caption>
+            Disponibles
+          </q-item-label>
+          <q-chip size="md" icon="attach_money">{{ $filters.money(book.balance) }}</q-chip>
+        </q-item-section>
+        <q-item-section  top class="col-4">
+          <q-input dense debounce="300" v-model="filter" placeholder="Busqueda...">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </q-item-section>
+      </q-item>
+      <q-item v-for="line in book.book" :key="line.id" >
+        <q-item-section avatar top class="col-1">
+          <q-item-label caption><small class="text-grey-8">{{ $filters.dateOrTime(line.created_at) }}</small></q-item-label>
+          <q-icon :name="lineIcon(line)" :color="lineColor(line)" />
+        </q-item-section>
+
+        <q-item-section top class="col-7">
+          <q-item-label lines="1">
+            <span class="text-weight-medium">
+              <q-icon :name="lineChannel(line).icon" :color="lineColor(line)" size="sm" /> {{ lineChannel(line).label }}
+            </span>
+          </q-item-label>
+          <q-item-label caption lines="1">
+            {{ line.description }}
+          </q-item-label>
+        </q-item-section>
+
+        <q-item-section side class="col-2">
+          <q-item-label caption>Monto</q-item-label>
+          <q-item-label lines="1">
+            <span :class="['text-weight-medium', 'text-' + lineColor(line)]">
+              {{ $filters.money(line.amount) }}
+            </span>
+          </q-item-label>
+        </q-item-section>
+        <q-item-section side class="col-2">
+          <q-item-label caption>Saldo</q-item-label>
+          <q-item-label lines="1">
+            <span :class="['text-weight-medium', line.balance ? 'text-positive' : 'text-negative']">
+              {{ $filters.money(line.balance) }}
+            </span>
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+      <q-item v-if="book.pagination.lastPage" class="justify-center">
+        <q-item-section avatar class="col-1">
+          <q-icon color="primary" name="hiking" />
+        </q-item-section>
+        <q-item-section class="col-6 text-primary">
+          Has llegado al final, No hay mas registros disponibles
+        </q-item-section>
+      </q-item>
+      <q-item class="justify-center">
+        <q-btn
+          v-if="book.pagination.page > 2"
+          icon="first_page"
+          :disable="book.pagination.page === 1"
+          @click="book.firstPage()"
+          unelevated
+          color="info"
+          class="q-mr-sm q-my-md"
+        />
+        <q-btn
+          icon="chevron_left"
+          :disable="book.pagination.page === 1"
+          @click="book.prevPage()"
+          unelevated
+          color="info"
+          class="q-mx-sm q-my-md"
+        />
+        <q-btn
+          icon="chevron_right"
+          @click="book.nextPage()"
+          :disable="book.pagination.lastPage"
+          unelevated
+          color="info"
+          class="q-ml-sm q-my-md"
+        />
+      </q-item>
+    </q-list>
   </div>
 </template>
 
 <script>
 import { ref } from 'vue'
 import { bookStore } from 'stores/book/'
-
-const columns = [
-  {
-    name: 'created_at',
-    label: 'Fecha',
-    align: 'left',
-    field: row => row.created_at,
-    format: val => `${val}`,
-    sortable: true
-  },
-  { name: 'description', align: 'left', label: 'Descripción', field: 'description', sortable: true },
-  { name: 'channel', label: 'Medio de pago', field: 'channel', sortable: true, align: 'left' },
-  { name: 'amount',
-    label: 'Monto',
-    field: row => row.amount,
-    format: val => `${val}`,
-    sortable: true
-  },
-  { name: 'balance', label: 'Saldo', field: 'balance', sortable: true },
-]
+import Actions from 'components/Book/Actions.vue'
 
 export default {
   name: 'income-outcome-list',
+  components: {
+    Actions
+  },
   setup () {
     const book = bookStore()
     const filter = ref('')
@@ -75,21 +107,43 @@ export default {
     return {
       filter,
       loading,
-      columns,
-      book,
+      book
     }
   },
   methods: {
-    async fetchBook () {
+    async fetchPage () {
       this.loading = true
-      await this.book.fetchBook()
+      await this.book.fetchPage()
       this.loading = false
+    },
+    lineIcon (line) {
+      if (line.type === 'income') {
+        return 'add'
+      }
+      return 'remove'
+    },
+    lineColor (line) {
+      if (line.type === 'income') {
+        return 'positive'
+      }
+      return 'negative'
+    },
+    lineChannel (line) {
+      return this.book?.availableChannels?.find(channel => channel.value === line.channel)
     },
   },
   computed: {
+    filteredBook () {
+      if (!this.book.book) {
+        return []
+      }
+      return this.book.book.filter(line => {
+        return line.description.toLowerCase().includes(this.filter.toLowerCase())
+      })
+    }
   },
   mounted () {
-    this.fetchBook()
+    this.fetchPage()
   }
 }
 </script>

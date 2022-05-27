@@ -5,7 +5,11 @@ import actions from './actions'
 export const bookStore = defineStore('book', {
   state: () => ({
     book: [],
-    line: {}
+    pagination: {
+      page: 1,
+      pages: [],
+      lastPage: false,
+    }
   }),
   getters,
   actions,
