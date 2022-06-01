@@ -1,51 +1,44 @@
 <template>
   <div style="width: 100%" class="rounded-borders bg-white q-my-md">
-    <Actions />
-    <q-list bordered separator dense class="col-12">
-      <q-item class="justify-between">
-        <q-item-section  top class="col-2">
-          <q-item-label caption>
-            Disponibles
-          </q-item-label>
-          <q-chip size="md" icon="attach_money">{{ $filters.money(book.balance) }}</q-chip>
-        </q-item-section>
-        <q-item-section  top class="col-4">
-          <q-input dense debounce="300" v-model="filter" placeholder="Busqueda...">
-            <template v-slot:append>
-              <q-icon name="search" />
+    <q-list separator dense class="col-12">
+      <q-item class="justify-end">
+        <q-item-section class="col-5">
+          <q-input outlined label="Disponibles" v-model="balance" dense readonly >
+            <template v-slot:prepend>
+              <q-icon name="attach_money" />
             </template>
           </q-input>
         </q-item-section>
       </q-item>
       <q-item v-for="line in book.book" :key="line.id" >
-        <q-item-section avatar top class="col-1">
+        <!-- <q-item-section avatar top class="col-1">
           <q-item-label caption><small class="text-grey-8">{{ $filters.dateOrTime(line.created_at) }}</small></q-item-label>
           <q-icon :name="lineIcon(line)" :color="lineColor(line)" />
-        </q-item-section>
+        </q-item-section> -->
 
-        <q-item-section top class="col-7">
+        <q-item-section top class="col-6">
           <q-item-label lines="1">
-            <span class="text-weight-medium">
-              <q-icon :name="lineChannel(line).icon" :color="lineColor(line)" size="sm" /> {{ lineChannel(line).label }}
+            <span class="text-weight-regular">
+              <q-icon :name="lineChannel(line).icon" :color="lineColor(line)" size="xs" /> {{ lineChannel(line).label }}
             </span>
           </q-item-label>
           <q-item-label caption lines="1">
-            {{ line.description }}
+            <small class="text-grey-8">{{ $filters.dateOrTime(line.created_at) }}</small> {{ line.description }}
           </q-item-label>
         </q-item-section>
 
-        <q-item-section side class="col-2">
+        <q-item-section side class="col-3">
           <q-item-label caption>Monto</q-item-label>
           <q-item-label lines="1">
-            <span :class="['text-weight-medium', 'text-' + lineColor(line)]">
+            <span :class="['text-weight-regular', 'text-' + lineColor(line)]">
               {{ $filters.money(line.amount) }}
             </span>
           </q-item-label>
         </q-item-section>
-        <q-item-section side class="col-2">
+        <q-item-section side class="col-3">
           <q-item-label caption>Saldo</q-item-label>
           <q-item-label lines="1">
-            <span :class="['text-weight-medium', line.balance ? 'text-positive' : 'text-negative']">
+            <span :class="['text-weight-regular', line.balance ? 'text-positive' : 'text-negative']">
               {{ $filters.money(line.balance) }}
             </span>
           </q-item-label>
@@ -87,6 +80,7 @@
         />
       </q-item>
     </q-list>
+    <Actions />
   </div>
 </template>
 
@@ -102,10 +96,8 @@ export default {
   },
   setup () {
     const book = bookStore()
-    const filter = ref('')
     const loading = ref(false)
     return {
-      filter,
       loading,
       book
     }
@@ -133,13 +125,8 @@ export default {
     },
   },
   computed: {
-    filteredBook () {
-      if (!this.book.book) {
-        return []
-      }
-      return this.book.book.filter(line => {
-        return line.description.toLowerCase().includes(this.filter.toLowerCase())
-      })
+    balance () {
+      return this.$filters.money(this.book.balance)
     }
   },
   mounted () {

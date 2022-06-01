@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center row">
-    <div class="q-pa-md col-6">
+    <div class="q-pa-md col-12">
       <Login />
     </div>
   </q-page>

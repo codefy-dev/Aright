@@ -1,18 +1,8 @@
 <template>
   <q-layout view="lHh Lpr lFf" >
-    <q-header elevated >
-      <q-toolbar >
-        <q-toolbar-title class="absolute-center">
-          {{ title }}
-        </q-toolbar-title>
-        <q-btn
-          v-if="auth.user?.uid"
-          @click="auth.logout"
-          class="absolute-right q-pr-sm"
-          icon="logout"
-          no-caps
-          flat
-          dense />
+    <q-header elevated v-if="auth.user?.uid">
+      <q-toolbar class="q-pa-sm" >
+        <Header />
       </q-toolbar>
     </q-header>
     <q-page-container >
@@ -23,15 +13,12 @@
 
 <script>
 import { authStore } from 'stores/auth/'
+import Header from 'src/components/Book/Header.vue'
 
 export default {
   name: 'main-layout',
-  computed: {
-    title () {
-      if (this.$route.fullPath === '/auth') {
-        return 'Inicio de sesión'
-      } else return 'Saldos y movimientos'
-    }
+  components: {
+    Header
   },
   setup () {
     const auth = authStore()

@@ -42,7 +42,7 @@ export default {
     }
     let bookCollection = collection(firebaseDb, 'books', user.activedBook, 'lines')
     await addDoc(bookCollection, newLine)
-    this.pagination.page = 0
+    this.firstPage()
     await this.fetchPage()
     Loading.hide()
   },

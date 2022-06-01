@@ -1,10 +1,12 @@
 <template>
   <div>
-    <q-btn-group spread>
-      <q-btn color="positive" label="Entrada" icon="savings" @click="openAddDialog()" />
-      <q-btn color="secondary" icon="auto_fix_high" @click="mockLine()" />
-      <q-btn color="negative" label="Salida" icon="shopping_cart" @click="openAddDialog('outcome')"/>
-    </q-btn-group>
+    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+      <q-fab color="primary" icon="add" direction="left">
+        <q-fab-action color="positive" @click="openAddDialog()" icon="savings" />
+        <q-fab-action color="secondary" @click="mockLine()" icon="auto_fix_high" />
+        <q-fab-action color="negative" @click="openAddDialog('outcome')" icon="shopping_cart" />
+      </q-fab>
+    </q-page-sticky>
     <q-dialog v-model="addDialog">
       <q-card style="width: 100%; max-width: 95vw;">
         <q-card-section class="row ">
