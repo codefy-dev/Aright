@@ -1,3 +1,4 @@
+import { Screen } from 'quasar'
 export default {
   balance (state) {
     return state?.book[0]?.balance ?? 0
@@ -35,5 +36,10 @@ export default {
         icon: 'credit_card'
       },
     ]
+  },
+  linesPerPage (state) {
+    let minPerPage = state.pagination.minPerPage
+    let posibleLines = Math.floor(Screen.height / 50)
+    return posibleLines < minPerPage ? minPerPage : posibleLines
   }
 }

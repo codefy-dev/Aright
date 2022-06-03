@@ -5,7 +5,6 @@ import { authStore } from '../auth/index.js'
 
 export default {
   async fetchUser () {
-    Loading.show()
     const auth = authStore()
     if (auth.user?.uid) {
       let usersRef = doc(firebaseDb, 'users', auth.user.uid)
@@ -26,7 +25,6 @@ export default {
         await this.createUser()
       }
     }
-    Loading.hide()
   },
   async createUser () {
     const auth = authStore()

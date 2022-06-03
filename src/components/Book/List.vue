@@ -1,6 +1,6 @@
 <template>
-  <div style="width: 100%" class="rounded-borders bg-white q-my-md">
-    <q-list separator dense class="col-12">
+  <div class="q-my-none" style="width: 100%; max-width: 850px">
+    <q-list separator dense class="bg-white fit" v-if="!loading && book.book?.length !== 0">
       <q-item class="justify-end">
         <q-item-section class="col-5">
           <q-input outlined label="Disponibles" v-model="balance" dense readonly >
@@ -10,24 +10,22 @@
           </q-input>
         </q-item-section>
       </q-item>
-      <q-item v-for="line in book.book" :key="line.id" >
-        <!-- <q-item-section avatar top class="col-1">
+      <q-item v-for="line in book.book" :key="line.id">
+        <q-item-section avatar top class="col-1 gt-sm">
           <q-item-label caption><small class="text-grey-8">{{ $filters.dateOrTime(line.created_at) }}</small></q-item-label>
           <q-icon :name="lineIcon(line)" :color="lineColor(line)" />
-        </q-item-section> -->
-
-        <q-item-section top class="col-6">
+        </q-item-section>
+        <q-item-section top class="col-xs-6 col-sm-6 col-md-7 col-lg-7 col-xl-7">
           <q-item-label lines="1">
             <span class="text-weight-regular">
               <q-icon :name="lineChannel(line).icon" :color="lineColor(line)" size="xs" /> {{ lineChannel(line).label }}
             </span>
           </q-item-label>
           <q-item-label caption lines="1">
-            <small class="text-grey-8">{{ $filters.dateOrTime(line.created_at) }}</small> {{ line.description }}
+            <small class="text-grey-8 lt-md" >{{ $filters.dateOrTime(line.created_at) }}</small> {{ line.description }}
           </q-item-label>
         </q-item-section>
-
-        <q-item-section side class="col-3">
+        <q-item-section side class="col-xs-3 col-sm-3 col-md-2 col-lg-2 col-xl-2">
           <q-item-label caption>Monto</q-item-label>
           <q-item-label lines="1">
             <span :class="['text-weight-regular', 'text-' + lineColor(line)]">
@@ -35,7 +33,7 @@
             </span>
           </q-item-label>
         </q-item-section>
-        <q-item-section side class="col-3">
+        <q-item-section side class="col-xs-3 col-sm-3 col-md-2 col-lg-2 col-xl-2">
           <q-item-label caption>Saldo</q-item-label>
           <q-item-label lines="1">
             <span :class="['text-weight-regular', line.balance ? 'text-positive' : 'text-negative']">
@@ -52,35 +50,38 @@
           Has llegado al final, No hay mas registros disponibles
         </q-item-section>
       </q-item>
-      <q-item class="justify-center">
-        <q-btn
-          v-if="book.pagination.page > 2"
-          icon="first_page"
-          :disable="book.pagination.page === 1"
-          @click="book.firstPage()"
-          unelevated
-          color="info"
-          class="q-mr-sm q-my-md"
-        />
-        <q-btn
-          icon="chevron_left"
-          :disable="book.pagination.page === 1"
-          @click="book.prevPage()"
-          unelevated
-          color="info"
-          class="q-mx-sm q-my-md"
-        />
-        <q-btn
-          icon="chevron_right"
-          @click="book.nextPage()"
-          :disable="book.pagination.lastPage"
-          unelevated
-          color="info"
-          class="q-ml-sm q-my-md"
-        />
+      <q-item v-else class="justify-center">
+        <q-item-section class="col-6">
+          <q-btn flat color="primary" icon="expand_more"  @click="book.nextPage()" />
+        </q-item-section>
+      </q-item>
+      <Actions />
+    </q-list>
+    <q-list v-else separator dense class="col-xl-8 bg-white rounded-borders" >
+      <q-item>
+        <q-item-section>
+          <q-linear-progress indeterminate />
+        </q-item-section>
+      </q-item>
+      <q-item v-for="line in book.linesPerPage" :key="line">
+        <q-item-section>
+          <q-linear-progress indeterminate />
+        </q-item-section>
+        <q-item-section top class="col-6">
+          <q-item-label lines="1">
+            <span class="text-weight-regular">
+              <q-skeleton type="QRadio" /> <q-skeleton type="rect" />
+            </span>
+          </q-item-label>
+        </q-item-section>
+        <q-item-section side class="col-3">
+          <q-skeleton type="QBadge" />
+        </q-item-section>
+        <q-item-section side class="col-3">
+          <q-skeleton type="QBadge" />
+        </q-item-section>
       </q-item>
     </q-list>
-    <Actions />
   </div>
 </template>
 
@@ -122,7 +123,7 @@ export default {
     },
     lineChannel (line) {
       return this.book?.availableChannels?.find(channel => channel.value === line.channel)
-    },
+    }
   },
   computed: {
     balance () {
