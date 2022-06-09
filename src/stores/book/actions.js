@@ -28,7 +28,7 @@ export default {
     const storedUser = userStore()
     let user = await storedUser.userInfo
     if (!user.activedBook) {
-      await this.addBook({ name: 'Personal' })
+      await this.addBook({ name: 'Personal', icon: 'book' })
     }
     let newLine = {
       created_by: user.id,

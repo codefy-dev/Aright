@@ -1,46 +1,23 @@
 <template>
-  <q-list padding>
+  <q-list padding v-if="user?.user.id">
     <q-item>
       <q-item-section>
         <q-item-label caption>Libros</q-item-label>
       </q-item-section>
     </q-item>
-    <q-item clickable v-ripple>
+    <q-item :active="book.active" clickable v-ripple v-for="(book, index) in user.user.books" :key="index">
       <q-item-section avatar>
-        <q-icon name="inbox" />
+        <q-icon :name="book.icon || 'book'" />
       </q-item-section>
       <q-item-section>
-        Inbox
+        {{ book.name }}
       </q-item-section>
     </q-item>
-
-    <q-item active clickable v-ripple>
-      <q-item-section avatar>
-        <q-icon name="star" />
-      </q-item-section>
-
-      <q-item-section>
-        Star
-      </q-item-section>
-    </q-item>
-
-    <q-item clickable v-ripple>
-      <q-item-section avatar>
-        <q-icon name="send" />
-      </q-item-section>
-
-      <q-item-section>
-        Send
-      </q-item-section>
-    </q-item>
-
     <q-separator />
-
     <q-item clickable v-ripple class="text-primary">
       <q-item-section avatar>
-        <q-icon name="add"  />
+        <q-icon name="add_circle"  />
       </q-item-section>
-
       <q-item-section>
         Crear Nuevo
       </q-item-section>
@@ -49,10 +26,13 @@
 </template>
 
 <script>
+import { userStore  } from 'stores/user/'
 export default {
   name: 'book-list',
   setup () {
+    const user = userStore()
     return {
+      user
     }
   }
 
