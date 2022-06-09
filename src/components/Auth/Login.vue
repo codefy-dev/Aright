@@ -1,5 +1,5 @@
 <template>
-  <q-card class="my-card">
+  <q-card style="width: 100%; max-width: 450px" v-if="!auth.user?.uid">
     <q-img src="~assets/ilustracion.jpg" :ratio="16/9" />
     <q-card-section>
       <div class="text-h6">Inicio de sesión</div>
@@ -27,6 +27,7 @@
         </div>
       </q-form>
     </q-card-section>
+    <q-inner-loading :showing="auth.user.loading" transition-duration="1000"></q-inner-loading>
   </q-card>
 </template>
 
@@ -48,7 +49,7 @@
   },
 		methods: {
 			submitForm() {
-          this.auth.login(this.formData)
+        this.auth.login(this.formData)
 			}
 		}
 	}

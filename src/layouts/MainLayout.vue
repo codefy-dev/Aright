@@ -1,10 +1,6 @@
 <template>
-  <q-layout view="lHh Lpr lFf" >
-    <q-header elevated v-if="auth.user?.uid">
-      <q-toolbar class="q-pa-sm" >
-        <Header />
-      </q-toolbar>
-    </q-header>
+  <q-layout view="hHh Lpr lff" >
+    <Header v-if="auth.user?.uid"/>
     <q-page-container >
       <router-view />
     </q-page-container>
@@ -13,7 +9,7 @@
 
 <script>
 import { authStore } from 'stores/auth/'
-import Header from 'src/components/Book/Header.vue'
+import Header from './Book/Header.vue'
 
 export default {
   name: 'main-layout',
@@ -22,7 +18,6 @@ export default {
   },
   setup () {
     const auth = authStore()
-
     return {
       auth
     }

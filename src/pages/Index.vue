@@ -1,17 +1,17 @@
 <template>
   <q-page class="flex flex-center" >
-    <List v-if="auth.user?.uid"/>
+    <Book v-if="auth.user?.uid"/>
   </q-page>
 </template>
 
 <script>
-import List from 'components/Book/List.vue'
+import Book from 'src/components/Book/Main.vue'
 import { authStore } from 'stores/auth/'
 
 export default {
   name: 'index-page',
   components: {
-    List
+    Book
   },
   setup () {
     const auth = authStore()

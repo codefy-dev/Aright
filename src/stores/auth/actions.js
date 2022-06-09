@@ -3,12 +3,12 @@ import { Notify, Loading } from 'quasar'
 
 export default {
   login (payload) {
-    Loading.show()
+    this.user.loading = true
     firebaseSignIn(firebaseAuth, payload.email, payload.password).then(response => {
       this.user = response.user
-      Loading.hide()
+      this.user.loading = false
     }).catch((error) => {
-      Loading.hide()
+      this.user.loading = false
       const errorCode = error.code;
       console.error(error)
       Notify.create({
@@ -26,7 +26,7 @@ export default {
   },
   handleAuthStateChange () {
     firebaseOnAuthStateChanged(firebaseAuth, (user) => {
-      this.user = user
+      this.user = { ...user, loading: false }
       this.router.push(this.user?.uid ? '/' : '/auth')
     });
   }

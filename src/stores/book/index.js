@@ -10,7 +10,8 @@ export const bookStore = defineStore('book', {
       page: 1,
       pages: [],
       lastPage: false,
-    }
+    },
+    leftMenu: false,
   }),
   getters,
   actions,

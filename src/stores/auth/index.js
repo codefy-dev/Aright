@@ -3,7 +3,9 @@ import actions from './actions';
 
 export const authStore = defineStore('auth', {
   state: () => ({
-    user: {}
+    user: {
+      loading: true
+    }
   }),
   actions,
 });

@@ -66,5 +66,8 @@ export default {
   async nextPage () {
     this.pagination.page++
     await this.fetchPage()
+  },
+  leftMenuToggle () {
+    this.leftMenu = !this.leftMenu
   }
 }
