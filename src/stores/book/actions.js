@@ -28,7 +28,11 @@ export default {
     const storedUser = userStore()
     let user = await storedUser.userInfo
     if (!user.activedBook) {
-      await this.addBook({ name: 'Personal', icon: 'book' })
+      await this.addBook({
+        name: 'Personal',
+        icon: 'book',
+        multi_balance: false
+      })
     }
     let newLine = {
       created_by: user.id,
@@ -42,7 +46,6 @@ export default {
     Loading.hide()
   },
   async addBook (book) {
-    Loading.show()
     const storedUser = userStore()
     let user = await storedUser.userInfo
     let newBook = {
@@ -53,15 +56,15 @@ export default {
     }
     let booksCollection = collection(firebaseDb, 'books')
     let bookReff = await addDoc(booksCollection, newBook)
+    storedUser.user.books[user.activedBook].active = false
     storedUser.user.activedBook = bookReff.id
     storedUser.user.books[bookReff.id] = {
-      name: book.name,
+      ...book,
       id: bookReff.id,
       active: true
     }
     await storedUser.updateUser()
     this.book = []
-    Loading.hide()
   },
   async nextPage () {
     this.pagination.page++
@@ -69,5 +72,18 @@ export default {
   },
   leftMenuToggle () {
     this.leftMenu = !this.leftMenu
+  },
+  async setAndFetchActiveBook (bookId) {
+    const storedUser = userStore()
+    let user = await storedUser.userInfo
+    storedUser.user.books[user.activedBook].active = false
+    storedUser.user.activedBook = bookId
+    storedUser.user.books[bookId].active = true
+    await storedUser.updateUser()
+    this.pagination.page = 1
+    this.pagination.lastPage = false
+    this.book = []
+    await this.fetchPage()
   }
+
 }

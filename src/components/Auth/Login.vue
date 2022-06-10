@@ -5,7 +5,7 @@
       <div class="text-h6">Inicio de sesión</div>
     </q-card-section>
     <q-card-section>
-      <q-form @submit="submitForm">
+      <q-form @submit="submitForm" autocomplete="off">
         <q-input
           v-model="formData.email"
           class="q-mb-md"
@@ -37,16 +37,16 @@
 	export default {
     name: 'login-form',
     setup () {
-    const auth = authStore()
-    const formData = ref({
-					email: '',
-					password: ''
-				})
-    return {
-      formData,
-      auth
-    }
-  },
+      const auth = authStore()
+      const formData = ref({
+            email: '',
+            password: ''
+          })
+      return {
+        formData,
+        auth
+      }
+    },
 		methods: {
 			submitForm() {
         this.auth.login(this.formData)
