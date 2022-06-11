@@ -1,9 +1,9 @@
 <template>
-  <div class="q-my-none" style="width: 100%; max-width: 850px">
-    <q-list separator dense class="bg-white fit" v-if="!loading && book.book?.length !== 0">
+  <div class="q-my-none vertical-top full-height" style="width: 100%; max-width: 850px">
+    <q-list separator dense class="bg-white fit  vertical-top" v-if="!loading">
       <q-item class="justify-end">
         <q-item-section class="col-5">
-          <q-input outlined label="Disponibles" v-model="balance" dense readonly >
+          <q-input outlined label="Balance" v-model="balance" dense readonly >
             <template v-slot:prepend>
               <q-icon name="attach_money" />
             </template>
@@ -46,13 +46,18 @@
         <q-item-section avatar class="col-1">
           <q-icon color="primary" name="hiking" />
         </q-item-section>
-        <q-item-section class="col-6 text-primary">
+        <q-item-section class="col-6 text-primary text-center">
           Has llegado al final, No hay mas registros disponibles
         </q-item-section>
       </q-item>
-      <q-item v-else class="justify-center">
+      <q-item v-else-if="!book.empty" class="justify-center">
         <q-item-section class="col-6">
-          <q-btn flat color="primary" icon="expand_more"  @click="book.nextPage()" />
+          <q-btn flat color="primary" icon="expand_more"  @click="book.nextPage()" :loading="loading" />
+        </q-item-section>
+      </q-item>
+      <q-item v-else class="justify-center">
+        <q-item-section class="col-6 full-height text-center">
+          No hay registros disponibles
         </q-item-section>
       </q-item>
       <Actions />

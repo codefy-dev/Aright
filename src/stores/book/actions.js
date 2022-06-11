@@ -1,5 +1,5 @@
 import { firebaseDb } from '../../boot/firebase'
-import { Loading, date } from 'quasar'
+import { Loading, date, Screen } from 'quasar'
 import { collection, query, getDocs, orderBy, addDoc, limit, startAfter } from "firebase/firestore";
 import { userStore } from '../user/index.js'
 
@@ -19,7 +19,7 @@ export default {
         this.pagination.lastPage = lines.size < this.linesPerPage
       } else {
         this.pagination.page = this.pagination.page !== 1 ? this.pagination.page - 1 : 1
-        this.pagination.lastPage = true
+        this.pagination.lastPage = lines.empty && this.pagination.page !== 1
       }
     }
   },
@@ -76,14 +76,19 @@ export default {
   async setAndFetchActiveBook (bookId) {
     const storedUser = userStore()
     let user = await storedUser.userInfo
-    storedUser.user.books[user.activedBook].active = false
-    storedUser.user.activedBook = bookId
-    storedUser.user.books[bookId].active = true
-    await storedUser.updateUser()
-    this.pagination.page = 1
-    this.pagination.lastPage = false
-    this.book = []
-    await this.fetchPage()
+    if (user.activedBook !== bookId) {
+      storedUser.user.books[user.activedBook].active = false
+      storedUser.user.activedBook = bookId
+      storedUser.user.books[bookId].active = true
+      await storedUser.updateUser()
+      this.pagination.page = 1
+      this.pagination.lastPage = false
+      this.book = []
+      await this.fetchPage()
+      if (Screen.lt.sm) {
+        this.leftMenuToggle()
+      }
+    }
   }
 
 }

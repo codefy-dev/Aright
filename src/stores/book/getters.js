@@ -41,5 +41,8 @@ export default {
     let minPerPage = state.pagination.minPerPage
     let posibleLines = Math.floor(Screen.height / 50)
     return posibleLines < minPerPage ? minPerPage : posibleLines
+  },
+  empty (state) {
+    return state.book.length === 0
   }
 }

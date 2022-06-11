@@ -5,7 +5,14 @@
         <q-item-label caption>Libros</q-item-label>
       </q-item-section>
     </q-item>
-    <q-item :active="book.active" clickable v-ripple v-for="(book, index) in user.user.books" :key="index" @click="setAndFetchActiveBook(index)">
+    <q-item
+      :active="book.active"
+      :clickable="user.user.activedBook !== index"
+      v-ripple
+      v-for="(book, index) in user.user.books"
+      :key="index"
+      @click="storeBook.setAndFetchActiveBook(index)"
+    >
       <q-item-section avatar>
         <q-icon :name="book.icon || 'book'" />
       </q-item-section>
@@ -29,17 +36,11 @@ export default {
   },
   setup () {
     const user = userStore()
-    const book = bookStore()
+    const storeBook = bookStore()
     return {
       user,
-      book
-    }
-  },
-  methods: {
-    setAndFetchActiveBook (id) {
-      this.book.setAndFetchActiveBook(id)
+      storeBook
     }
   }
-
 }
 </script>
