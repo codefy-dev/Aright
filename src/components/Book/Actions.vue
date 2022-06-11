@@ -8,10 +8,11 @@
       </q-fab>
     </q-page-sticky>
     <q-dialog v-model="addDialog">
-      <q-card style="width: 100%; max-width: 95vw;">
+      <q-card>
         <q-card-section class="row ">
           <div class="text-h6">
-            <q-avatar :icon="actionIcon()" :color="acctionColor()" text-color="white" /> Nuevo Registro de <strong :class="['text-' + acctionColor()]">{{ actionTitle() }}</strong>.
+            <q-avatar :icon="actionIcon()" :color="acctionColor()" text-color="white" />
+            Nuevo Registro de <strong :class="['text-' + acctionColor()]">{{ actionTitle() }}</strong>.
           </div>
         </q-card-section>
         <q-card-section vertical >

@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center" >
+  <q-page class="flex justify-center" >
     <Book v-if="auth.user?.uid"/>
   </q-page>
 </template>

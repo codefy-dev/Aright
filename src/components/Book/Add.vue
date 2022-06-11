@@ -8,7 +8,7 @@
     </q-item-section>
   </q-item>
   <q-dialog v-model="formDialog" persistent >
-    <q-card style="width: 100%; max-width: 450px">
+    <q-card>
       <q-form @submit="addBook()" >
         <q-card-section class="text-subtitle2 text-primary">
           <q-icon name="add_circle" color="primary" size="md" />

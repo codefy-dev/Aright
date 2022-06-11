@@ -1,5 +1,15 @@
 // app global css in SCSS form
 .q-page-container {
-  background: url(assets/ilustracion2Background.jpg);
+  background: url(assets/main-background.jpg) no-repeat center center fixed;
   background-size: 100%;
+}
+
+.q-dialog {
+  background: url(assets/main-background.jpg);
+  background-size: 100%;
+}
+
+.q-dialog .q-card {
+  width: 100%;
+  max-width: 450px;
 }
