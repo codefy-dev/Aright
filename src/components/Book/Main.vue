@@ -56,9 +56,20 @@
         </q-item-section>
       </q-item>
       <q-item v-else class="justify-center">
-        <q-item-section class="col-6 full-height text-center">
-          No hay registros disponibles
-        </q-item-section>
+         <q-card class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 q-ma-md">
+          <q-img src="~assets/empty-list.jpg" :ratio="25/9" >
+            <div class="absolute-top text-center">
+              <div class="text-h6">
+                <q-icon size="md" name="pending" />
+                Ups!, no hay registros para listar
+              </div>
+              <div class="text-subtitle2">Ingresa tu primer movimiento</div>
+            </div>
+          </q-img>
+          <q-card-actions align="around">
+             <Actions :sticky="false"/>
+          </q-card-actions>
+        </q-card>
       </q-item>
       <Actions />
     </q-list>
@@ -96,7 +107,7 @@ import { bookStore } from 'stores/book/'
 import Actions from 'components/Book/Actions.vue'
 
 export default {
-  name: 'income-outcome-list',
+  name: 'cash-flow-list',
   components: {
     Actions
   },
@@ -115,13 +126,13 @@ export default {
       this.loading = false
     },
     lineIcon (line) {
-      if (line.type === 'income') {
+      if (line.type === 'inflow') {
         return 'add'
       }
       return 'remove'
     },
     lineColor (line) {
-      if (line.type === 'income') {
+      if (line.type === 'inflow') {
         return 'positive'
       }
       return 'negative'

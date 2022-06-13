@@ -1,7 +1,7 @@
 {
   "name": "qntas",
   "version": "0.0.1",
-  "description": "Small solution to control income/outcome of nano businesses",
+  "description": "Small solution to control cash flow of nano businesses",
   "productName": "Qntas App",
   "author": "Miharbi Hernandez <miharbihernandez@gmail.com>",
   "private": true,

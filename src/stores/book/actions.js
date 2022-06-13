@@ -37,7 +37,7 @@ export default {
     let newLine = {
       created_by: user.id,
       created_at: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
-      balance: parseInt(this.balance) + parseInt(line.type === 'income' ? line.amount : line.amount * -1),
+      balance: parseInt(this.balance) + parseInt(line.type === 'inflow' ? line.amount : line.amount * -1),
       ...line,
     }
     let bookCollection = collection(firebaseDb, 'books', user.activedBook, 'lines')
@@ -56,15 +56,7 @@ export default {
     }
     let booksCollection = collection(firebaseDb, 'books')
     let bookReff = await addDoc(booksCollection, newBook)
-    storedUser.user.books[user.activedBook].active = false
-    storedUser.user.activedBook = bookReff.id
-    storedUser.user.books[bookReff.id] = {
-      ...book,
-      id: bookReff.id,
-      active: true
-    }
-    await storedUser.updateUser()
-    this.book = []
+    this.setActiveBook({ ...book, id: bookReff.id }, false)
   },
   async nextPage () {
     this.pagination.page++
@@ -73,19 +65,21 @@ export default {
   leftMenuToggle () {
     this.leftMenu = !this.leftMenu
   },
-  async setAndFetchActiveBook (bookId) {
+  async setActiveBook (book, fetch = true) {
     const storedUser = userStore()
     let user = await storedUser.userInfo
-    if (user.activedBook !== bookId) {
+    if (user.activedBook !== book.id) {
       storedUser.user.books[user.activedBook].active = false
-      storedUser.user.activedBook = bookId
-      storedUser.user.books[bookId].active = true
+      storedUser.user.activedBook = book.id
+      storedUser.user.books[book.id] = { ...book, active: true }
       await storedUser.updateUser()
       this.pagination.page = 1
       this.pagination.lastPage = false
       this.book = []
-      await this.fetchPage()
-      if (Screen.lt.sm) {
+      if (fetch) {
+        await this.fetchPage()
+      }
+      if (this.leftMenu && Screen.lt.sm) {
         this.leftMenuToggle()
       }
     }

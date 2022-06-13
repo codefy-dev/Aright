@@ -11,7 +11,7 @@
       v-ripple
       v-for="(book, index) in user.user.books"
       :key="index"
-      @click="storeBook.setAndFetchActiveBook(index)"
+      @click="storeBook.setActiveBook(book)"
     >
       <q-item-section avatar>
         <q-icon :name="book.icon || 'book'" />
