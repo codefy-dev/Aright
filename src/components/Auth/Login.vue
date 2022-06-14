@@ -12,13 +12,28 @@
             class="q-mb-md"
             outlined
             type="email"
-            label="Email" />
+            label="Email"
+            :rules="[val => !!val || 'Email Requerido', isValidEmail || 'Email Invalido']"
+            lazy-rules
+            />
           <q-input
             v-model="formData.password"
-            class="q-mb-md"
             outlined
-            type="password"
-            label="Password" />
+            :type="isPwd ? 'password' : 'text'"
+            label="Contraseña"
+            ref="password"
+            :rules="[val => !!val || 'Contraseña Requerida']"
+            lazy-rules
+            @keyup.enter="submitForm"
+          >
+            <template v-slot:append>
+              <q-icon
+                :name="isPwd ? 'visibility_off' : 'visibility'"
+                class="cursor-pointer"
+                @click="isPwd = !isPwd"
+              />
+            </template>
+          </q-input>
           <div class="row">
             <q-space />
             <q-btn
@@ -44,15 +59,21 @@
             email: '',
             password: ''
           })
+      const isPwd = ref(true)
       return {
         formData,
-        auth
+        auth,
+        isPwd
       }
     },
 		methods: {
 			submitForm() {
         this.auth.login(this.formData)
-			}
+			},
+      isValidEmail (val) {
+        const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
+        return emailPattern.test(val) || 'Email Invalido';
+      }
 		},
     computed: {
       show() {

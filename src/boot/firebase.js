@@ -1,5 +1,13 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+  updateProfile,
+  updatePassword
+} from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 // Agregar configuración firebase:
@@ -20,6 +28,8 @@ const firebaseSignIn = signInWithEmailAndPassword
 const firebaseOnAuthStateChanged = onAuthStateChanged
 const firebaseSignOut = signOut
 const firebaseDb = getFirestore(firebaseApp)
+const firebaseUpdateProfile = updateProfile
+const firebaseUpdatePassword = updatePassword
 
 export {
   firebaseAuth,
@@ -27,5 +37,7 @@ export {
   firebaseOnAuthStateChanged,
   firebaseApp,
   firebaseSignOut,
-  firebaseDb
+  firebaseDb,
+  firebaseUpdateProfile,
+  firebaseUpdatePassword
 }
