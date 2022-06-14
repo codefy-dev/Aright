@@ -1,6 +1,6 @@
 <template>
   <div class="q-my-none vertical-top full-height" style="width: 100%; max-width: 850px">
-    <q-list separator dense class="bg-white fit  vertical-top" v-if="!loading">
+    <q-list separator dense class="book fit vertical-top" v-if="!loading">
       <q-item class="justify-end">
         <q-item-section class="col-5">
           <q-input outlined label="Balance" v-model="balance" dense readonly >
@@ -57,18 +57,17 @@
       </q-item>
       <q-item v-else class="justify-center">
          <q-card class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 q-ma-md">
-          <q-img src="~assets/empty-list.jpg" :ratio="25/9" >
-            <div class="absolute-top text-center">
+          <q-img src="~assets/empty-list.jpg" :ratio="20/9" fit="cover">
+            <div class="absolute-bottom text-center">
               <div class="text-h6">
                 <q-icon size="md" name="pending" />
-                Ups!, no hay registros para listar
+                No hay registros aun para mostrar
               </div>
               <div class="text-subtitle2">Ingresa tu primer movimiento</div>
+              <q-separator spaced inset dark />
+              <div class="full-width"><Actions :sticky="false"/></div>
             </div>
           </q-img>
-          <q-card-actions align="around">
-             <Actions :sticky="false"/>
-          </q-card-actions>
         </q-card>
       </q-item>
       <Actions />

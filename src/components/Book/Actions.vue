@@ -25,7 +25,7 @@
             <q-select outlined v-model="newLine.channel" :options="book.availableChannels" label="Tipo de Transacción" required />
             <q-input outlined v-model="newLine.description" label="Descripción" required  />
             <q-card-actions align="right" >
-              <q-btn color="positive" label="Guardar" icon="save"  type="submit" :loading="loading" />
+              <q-btn color="primary" label="Guardar" icon="save"  type="submit" :loading="loading" />
             </q-card-actions>
           </q-form>
         </q-card-section>
