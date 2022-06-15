@@ -21,6 +21,14 @@ export default {
     ][ctx.named('score')],
     passwordMinLength: ctx => `La contraseña debe tener al menos ${ctx.named('minLength')} caracteres`,
     passwordWeak: 'Contraseña muy débil',
+    passwordUpdated: 'Contraseña actualizada correctamente',
+    profileUpdated: 'Perfil actualizado correctamente',
     nameIsRequired: 'Nombre es requerido',
+    currentPassword: 'Contraseña actual',
+    changeOfPassword: 'Cambio de contraseña (Opcional)',
+    currentPasswordRequiredToChangePassword: 'La contraseña actual es requerida para cambiar la contraseña',
+    problemChangingPassword: 'Hubo un problema cambiando su contraseña',
+    problemUpdatingProfile: 'Hubo un problema actualizando su perfil',
+    problemTryingToLogin: 'Hubo un problema intentando iniciar sesión',
   }
 }

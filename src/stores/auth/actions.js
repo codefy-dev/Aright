@@ -4,7 +4,9 @@ import {
   firebaseOnAuthStateChanged,
   firebaseSignOut,
   firebaseUpdateProfile,
-  firebaseUpdatePassword
+  firebaseUpdatePassword,
+  firebaseReauthenticate,
+  firebaseEmailAuthProvider
 } from '../../boot/firebase';
 import { Notify, Quasar as q } from 'quasar'
 import { i18n } from '../../boot/i18n';
@@ -22,7 +24,7 @@ export default {
       const errorCode = error.code;
       console.error(error)
       Notify.create({
-        message: 'Ocurrió un error al intentar hacer login | ' + errorCode,
+        message: i18n.global.t('auth.problemTryingToLogin') + ' | ' + errorCode,
         type: 'negative'
       })
     });
@@ -45,23 +47,65 @@ export default {
     firebaseUpdateProfile(firebaseAuth.currentUser, payload).then(() => {
       this.user.loading = false
       Notify.create({
-        message: 'Datos actualizados correctamente',
+        message: i18n.global.t('auth.profileUpdated'),
         type: 'positive'
       })
-    }
-    ).catch((error) => {
+      if (payload.passwords) {
+        this.updatePassword(payload.passwords).catch(error => {
+          Notify.create({
+            message: i18n.global.t('auth.problemChangingPassword') + ' | ' + error.code,
+            type: 'negative'
+          })
+        })
+      }
+    }).catch((error) => {
       this.user.loading = false
-      const errorCode = error.code;
       console.error(error)
       Notify.create({
-        message: 'Ocurrió un error al intentar actualizar los datos | ' + errorCode,
+        message: i18n.global.t('auth.problemUpdatingProfile') + ' | ' + error.code,
         type: 'negative'
+      })
+    })
+  },
+  updatePassword (passwords) {
+    return new Promise((resolve, reject) => {
+      this.reauthenticate(passwords.current).then(() => {
+        this.user.loading = true
+        if (this.passwordStrength(passwords.new).score < 2) {
+          reject({
+            message: i18n.global.t('auth.passwordWeak'),
+            code: i18n.global.t('auth.passwordWeak')
+          })
+        }
+        firebaseUpdatePassword(firebaseAuth.currentUser, passwords.new).then(() => {
+          this.user.loading = false
+          Notify.create({
+            message: i18n.global.t('auth.passwordUpdated'),
+            type: 'positive'
+          })
+          resolve()
+        }).catch((error) => {
+          this.user.loading = false
+          reject(error)
+        })
+      }).catch((error) => {
+        this.user.loading = false
+        reject(error)
+      })
+    })
+  },
+  reauthenticate (password) {
+    return new Promise((resolve, reject) => {
+      const credential = firebaseEmailAuthProvider.credential(this.user.email, password)
+      firebaseReauthenticate(firebaseAuth.currentUser, credential).then(() => {
+        resolve()
+      }).catch((error) => {
+        reject(error)
       })
     })
   },
   passwordStrength (password) {
     let score = zxcvbn(password || '').score
-    console.log(i18n, q)
     return {
       score,
       color: ['red', 'red', 'deep-orange', 'orange', 'green'][score],

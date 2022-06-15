@@ -6,7 +6,9 @@ import {
   onAuthStateChanged,
   signOut,
   updateProfile,
-  updatePassword
+  updatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
@@ -30,6 +32,8 @@ const firebaseSignOut = signOut
 const firebaseDb = getFirestore(firebaseApp)
 const firebaseUpdateProfile = updateProfile
 const firebaseUpdatePassword = updatePassword
+const firebaseReauthenticate = reauthenticateWithCredential
+const firebaseEmailAuthProvider = EmailAuthProvider
 
 export {
   firebaseAuth,
@@ -39,5 +43,7 @@ export {
   firebaseSignOut,
   firebaseDb,
   firebaseUpdateProfile,
-  firebaseUpdatePassword
+  firebaseUpdatePassword,
+  firebaseReauthenticate,
+  firebaseEmailAuthProvider
 }
