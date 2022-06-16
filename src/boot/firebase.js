@@ -11,6 +11,7 @@ import {
   EmailAuthProvider
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 // Agregar configuración firebase:
 var firebaseConfig = {
@@ -34,6 +35,7 @@ const firebaseUpdateProfile = updateProfile
 const firebaseUpdatePassword = updatePassword
 const firebaseReauthenticate = reauthenticateWithCredential
 const firebaseEmailAuthProvider = EmailAuthProvider
+const firebaseStorage = getStorage(firebaseApp);
 
 export {
   firebaseAuth,
@@ -45,5 +47,6 @@ export {
   firebaseUpdateProfile,
   firebaseUpdatePassword,
   firebaseReauthenticate,
-  firebaseEmailAuthProvider
+  firebaseEmailAuthProvider,
+  firebaseStorage
 }

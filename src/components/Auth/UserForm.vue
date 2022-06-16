@@ -12,16 +12,7 @@
     <q-card>
       <q-form @submit="updateProfile()" autocomplete="off">
         <q-card-section class="text-subtitle2 text-primary">
-          <q-avatar size="50px">
-            <img :src="photoURL" v-if="photoURL">
-            <q-icon
-              v-else
-              name="account_circle"
-              color="white"
-              size="50px"
-              class="bg-primary"
-            />
-          </q-avatar>
+          <UserAvatar />
           {{ $t('auth.titleUserProfile')}}<br>
           <small class="text-grey"> {{ user.email }}</small>
         </q-card-section>
@@ -29,7 +20,7 @@
         <q-card-section class="row items-center">
           <q-input
             outlined
-            v-model="displayName"
+            v-model="user.displayName"
             :label="$t('auth.displayName')"
             class="full-width"
             lazy-rules
@@ -112,28 +103,29 @@
 <script>
 import { ref } from 'vue'
 import { authStore } from 'src/stores/auth'
+import UserAvatar from './UserAvatar.vue'
+
 export default {
   name: 'user-form',
+  components: {
+    UserAvatar,
+  },
   setup() {
     const formDialog = ref(false)
-    const displayName = ref('')
-    const photoURL = ref('')
     const newPassword = ref('')
     const currentPassword = ref('')
     const auth = authStore()
     const isPwd1 = ref(true)
     const isPwd2 = ref(true)
-    const user = auth.user
+    const user = ref(auth.user)
     return {
       formDialog,
-      displayName,
-      photoURL,
       auth,
       newPassword,
       currentPassword,
       isPwd1,
       isPwd2,
-      user,
+      user
     }
   },
   methods: {
@@ -153,8 +145,7 @@ export default {
         return
       }
       const user = {
-        displayName: this.displayName,
-        photoURL: this.photoURL,
+        displayName: this.user.displayName,
         passwords: this.newPassword ? {
             current: this.currentPassword,
             new: this.newPassword,
@@ -164,11 +155,10 @@ export default {
       this.formDialog = false
     },
     showDialog () {
-      this.displayName = this.user.displayName
-      this.photoURL = this.user.photoURL
       this.newPassword = ''
       this.currentPassword = ''
-      this.isPwd = true
+      this.isPwd1 = true
+      this.isPwd2 = true
       this.formDialog = true
     },
   },

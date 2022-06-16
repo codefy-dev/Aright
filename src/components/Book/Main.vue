@@ -1,5 +1,5 @@
 <template>
-  <div class="q-my-none vertical-top full-height" style="width: 100%; max-width: 850px">
+  <q-card class="q-my-none vertical-top full-height" style="width: 100%; max-width: 850px" square>
     <q-list separator dense class="book fit vertical-top" v-if="!loading">
       <q-item class="justify-end">
         <q-item-section class="col-5">
@@ -97,7 +97,7 @@
         </q-item-section>
       </q-item>
     </q-list>
-  </div>
+  </q-card>
 </template>
 
 <script>

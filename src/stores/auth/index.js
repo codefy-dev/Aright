@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import actions from './actions';
+import getters from './getters'
 
 export const authStore = defineStore('auth', {
   state: () => ({
@@ -8,4 +9,5 @@ export const authStore = defineStore('auth', {
     }
   }),
   actions,
+  getters
 });
