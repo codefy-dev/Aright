@@ -47,7 +47,6 @@ export default {
   },
   updateProfile (payload) {
     this.user.loading = true
-    console.log(payload)
     firebaseUpdateProfile(firebaseAuth.currentUser, payload).then(() => {
       this.user.loading = false
       Notify.create({
@@ -128,7 +127,7 @@ export default {
   uploadAvatar (avatar) {
     return new Promise((resolve, reject) => {
       this.user.loading = true
-      const storageRef = ref(firebaseStorage, `users/${this.user.uid}/avatar.jpeg`)
+      const storageRef = ref(firebaseStorage, `users/${this.user.uid}/avatar/avatar.jpeg`)
       this.resizeBase64Image(avatar).then(resized => {
         uploadString(storageRef, resized, 'data_url').then(() => {
           getDownloadURL(storageRef).then(photoURL => {

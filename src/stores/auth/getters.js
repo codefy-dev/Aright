@@ -1,7 +1,7 @@
 
 export default {
   darkMode (state) {
-    let url = new URL(state?.user?.photoURL ?? '')
+    let url = new URL(state?.user?.photoURL ?? 'http://localhost')
     return url.searchParams.get('dark') === 'true'
   },
   language (state) {
