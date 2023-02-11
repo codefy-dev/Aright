@@ -44,5 +44,8 @@ export default {
   },
   empty (state) {
     return state.book.length === 0
+  },
+  membersBalance (state) {
+    return state?.book[0]?.members_balance ?? {}
   }
 }

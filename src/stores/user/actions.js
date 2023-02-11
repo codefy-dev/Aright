@@ -12,12 +12,11 @@ export default {
       if (docSnap.exists()) {
         let data = docSnap.data()
         const books = new Map(Object.entries(data.books));
+        data.displayName = auth.user.displayName
+        data.photoURL = auth.user.photoURL
+        data.email = auth.user.email
+        data.phoneNumber = auth.user.phoneNumber
         this.user = {
-          id: auth.user.uid,
-          displayName: auth.user.displayName,
-          email: auth.user.email,
-          photoURL: auth.user.photoURL,
-          phoneNumber: auth.user.phoneNumber,
           activedBook: [...books.values()].find(book => book.active)?.uid,
           ...data
         }

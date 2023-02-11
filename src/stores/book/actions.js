@@ -37,7 +37,8 @@ export default {
     let newLine = {
       created_by: user.id,
       created_at: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
-      balance: parseInt(this.balance) + parseInt(line.type === 'inflow' ? line.amount : line.amount * -1),
+      balance: this.getBalance(line),
+      members_balance: await this.getMembersBalance(line),
       ...line,
     }
     let bookCollection = collection(firebaseDb, 'books', user.activedBook, 'lines')
@@ -83,6 +84,31 @@ export default {
         this.leftMenuToggle()
       }
     }
+  },
+  getBalance (line, balance = null) {
+    balance = balance !== null ? balance : this.balance
+    return parseInt(balance) + parseInt(line.type === 'inflow' ? line.amount : line.amount * -1)
+  },
+  async getMembersBalance (line) {
+    const storedUser = userStore()
+    let user = await storedUser.userInfo
+    let membersBalance = this.membersBalance
+    let memberBalance = membersBalance[user.id] !== undefined ? membersBalance[user.id]?.balance : 0
+    membersBalance[user.id] = {
+      id: user.id,
+      name: user.displayName,
+      balance: this.getBalance(line, memberBalance)
+    }
+    return this.orderMembersBalance(membersBalance)
+  },
+  orderMembersBalance (membersBalance) {
+    let membersBalanceArray = Object.values(membersBalance)
+    membersBalanceArray.sort((a, b) => b.balance - a.balance)
+    membersBalance = {}
+    membersBalanceArray.forEach(member => {
+      membersBalance[member.id] = member
+    })
+    return membersBalance
   }
 
 }
