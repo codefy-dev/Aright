@@ -9,6 +9,7 @@
     :width="200"
     :breakpoint="500"
     bordered
+    v-show="!book.empty"
   >
     <q-scroll-area class="fit">
       <BookList />
@@ -17,22 +18,22 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import { bookStore } from 'src/stores/book'
-import BookList from 'components/Book/List.vue'
+import { ref } from "vue";
+import { bookStore } from "src/stores/book";
+import BookList from "components/Book/List.vue";
 
 export default {
-  name: 'left-menu',
+  name: "left-menu",
   components: {
     BookList
-},
-  setup () {
-    const miniState = ref(true)
-    const book = bookStore()
+  },
+  setup() {
+    const miniState = ref(true);
+    const book = bookStore();
     return {
       miniState,
       book
-    }
+    };
   }
-}
+};
 </script>

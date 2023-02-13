@@ -1,7 +1,0 @@
-{
-  "appId": "org.qntas.qntas.app",
-  "appName": "Qntas App",
-  "bundledWebRuntime": false,
-  "npmClient": "yarn",
-  "webDir": "www"
-}

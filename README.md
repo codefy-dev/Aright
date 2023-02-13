@@ -1,4 +1,4 @@
-# Qntas App (qntas)
+# Aright App
 
 Small solution to control cash flow of nano businesses
 

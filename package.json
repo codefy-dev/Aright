@@ -1,8 +1,8 @@
 {
-  "name": "qntas",
+  "name": "aright",
   "version": "0.0.1",
   "description": "Small solution to control cash flow of nano businesses",
-  "productName": "Qntas App",
+  "productName": "Aright App",
   "author": "Miharbi Hernandez <miharbihernandez@gmail.com>",
   "private": true,
   "scripts": {

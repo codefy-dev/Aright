@@ -1,7 +1,11 @@
 <template>
   <q-dialog v-model="show" persistent>
-    <q-card >
-      <q-img src="~assets/login-header.jpg" :ratio="16/9" />
+    <q-card>
+      <q-img src="~assets/login-header.jpg" :ratio="16 / 9">
+        <div class="absolute-bottom text-right">
+          <q-img src="~assets/logo.svg" style="max-width: 200px" />
+        </div>
+      </q-img>
       <q-card-section>
         <div class="text-h6">Inicio de sesión</div>
       </q-card-section>
@@ -13,16 +17,19 @@
             outlined
             type="email"
             label="Email"
-            :rules="[val => !!val || 'Email Requerido', isValidEmail || 'Email Invalido']"
+            :rules="[
+              (val) => !!val || 'Email Requerido',
+              isValidEmail || 'Email Invalido'
+            ]"
             lazy-rules
-            />
+          />
           <q-input
             v-model="formData.password"
             outlined
             :type="isPwd ? 'password' : 'text'"
             label="Contraseña"
             ref="password"
-            :rules="[val => !!val || 'Contraseña Requerida']"
+            :rules="[(val) => !!val || 'Contraseña Requerida']"
             lazy-rules
             @keyup.enter="submitForm"
           >
@@ -36,49 +43,50 @@
           </q-input>
           <div class="row">
             <q-space />
-            <q-btn
-              color="primary"
-              type="submit"
-              label="Login" />
+            <q-btn color="primary" type="submit" label="Login" />
           </div>
         </q-form>
       </q-card-section>
-      <q-inner-loading :showing="auth.user.loading" transition-duration="1000"></q-inner-loading>
+      <q-inner-loading
+        :showing="auth.user.loading"
+        transition-duration="1000"
+      ></q-inner-loading>
     </q-card>
   </q-dialog>
 </template>
 
 <script>
-  import { authStore } from 'stores/auth/'
-  import { ref } from 'vue'
-	export default {
-    name: 'login-form',
-    setup () {
-      const auth = authStore()
-      const formData = ref({
-            email: '',
-            password: ''
-          })
-      const isPwd = ref(true)
-      return {
-        formData,
-        auth,
-        isPwd
-      }
+import { authStore } from "stores/auth/";
+import { ref } from "vue";
+export default {
+  name: "login-form",
+  setup() {
+    const auth = authStore();
+    const formData = ref({
+      email: "",
+      password: ""
+    });
+    const isPwd = ref(true);
+    return {
+      formData,
+      auth,
+      isPwd
+    };
+  },
+  methods: {
+    submitForm() {
+      this.auth.login(this.formData);
     },
-		methods: {
-			submitForm() {
-        this.auth.login(this.formData)
-			},
-      isValidEmail (val) {
-        const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
-        return emailPattern.test(val) || 'Email Invalido';
-      }
-		},
-    computed: {
-      show() {
-        return !this.auth.user?.uid
-      }
+    isValidEmail(val) {
+      const emailPattern =
+        /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
+      return emailPattern.test(val) || "Email Invalido";
     }
-	}
+  },
+  computed: {
+    show() {
+      return !this.auth.user?.uid;
+    }
+  }
+};
 </script>
