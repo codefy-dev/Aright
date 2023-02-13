@@ -31,5 +31,11 @@ export default {
     problemChangingPassword: 'There was a problem changing your password',
     problemUpdatingProfile: 'There was a problem updating your profile',
     problemTryingToLogin: 'There was a problem trying to login',
+    newUserWhatsYourDisplayName: 'Welcome! What is your name?',
+    newUserWhatsYourDisplayNameMessage: 'Please set your display name',
   },
+  book: {
+    title: 'Title',
+    addBookSuccess: 'Book added successfully',
+  }
 }

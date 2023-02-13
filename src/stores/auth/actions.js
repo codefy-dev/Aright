@@ -13,6 +13,7 @@ import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { Notify, Dark } from 'quasar'
 import { i18n } from '../../boot/i18n';
 import zxcvbn from 'zxcvbn'
+import md5 from 'md5'
 
 
 export default {
@@ -159,6 +160,7 @@ export default {
     })
   },
   updateParamsUrl (url, params) {
+    url = url || 'https://www.gravatar.com/avatar/' + md5(this.user.email)
     url = new URL(url)
     for (const param in params) {
       url.searchParams.set(param, params[param])

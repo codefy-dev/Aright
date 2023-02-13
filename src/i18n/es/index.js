@@ -30,5 +30,11 @@ export default {
     problemChangingPassword: 'Hubo un problema cambiando su contraseña',
     problemUpdatingProfile: 'Hubo un problema actualizando su perfil',
     problemTryingToLogin: 'Hubo un problema intentando iniciar sesión',
+    newUserWhatsYourDisplayName: 'Bienvenido ¿Cuál es tu nombre?',
+    newUserWhatsYourDisplayNameMessage: 'Por favor, indique su nombre a mostrar',
+  },
+  book: {
+    title: 'Título',
+    addBookSuccess: 'Libro agregado correctamente',
   }
 }

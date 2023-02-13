@@ -1,7 +1,8 @@
 import { firebaseDb } from '../../boot/firebase'
-import { Loading, date, Screen } from 'quasar'
+import { Loading, date, Screen, Notify } from 'quasar'
 import { collection, query, getDocs, orderBy, addDoc, limit, startAfter } from "firebase/firestore";
 import { userStore } from '../user/index.js'
+import { i18n } from '../../boot/i18n';
 
 export default {
   async fetchPage () {
@@ -57,7 +58,13 @@ export default {
     }
     let booksCollection = collection(firebaseDb, 'books')
     let bookReff = await addDoc(booksCollection, newBook)
-    this.setActiveBook({ ...book, id: bookReff.id }, false)
+    await this.setActiveBook({ ...newBook, id: bookReff.id }, false)
+    Notify.create({
+      message: i18n.global.t('book.addBookSuccess'),
+      color: 'positive',
+      icon: 'check_circle'
+    })
+
   },
   async nextPage () {
     this.pagination.page++
@@ -70,7 +77,9 @@ export default {
     const storedUser = userStore()
     let user = await storedUser.userInfo
     if (user.activedBook !== book.id) {
-      storedUser.user.books[user.activedBook].active = false
+      if (user.activedBook !== null && user.activedBook !== undefined) {
+        storedUser.user.books[user.activedBook].active = false
+      }
       storedUser.user.activedBook = book.id
       storedUser.user.books[book.id] = { ...book, active: true }
       await storedUser.updateUser()
