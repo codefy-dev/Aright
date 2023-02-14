@@ -5,7 +5,13 @@ export default {
     }
     return this.user
   },
-  async activeBook () {
-    return this.user?.activedBook ? this.user.books[this.user.activedBook] : {}
+  activeBook (state) {
+    return state.user?.activedBook ? state.user.books[state.user.activedBook] : {}
+  },
+  activedBookIsMultiBalance () {
+    return this.activeBook?.multi_balance !== undefined ? this.activeBook.multi_balance : false
+  },
+  hasBooks (state) {
+    return state.user?.books?.length !== 0
   }
 }

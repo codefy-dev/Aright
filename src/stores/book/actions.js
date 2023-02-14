@@ -40,6 +40,7 @@ export default {
       created_at: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
       balance: this.getBalance(line),
       members_balance: await this.getMembersBalance(line),
+      multi_balance: storedUser.activedBookIsMultiBalance,
       ...line,
     }
     let bookCollection = collection(firebaseDb, 'books', user.activedBook, 'lines')

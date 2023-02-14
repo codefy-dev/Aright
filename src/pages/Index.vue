@@ -1,23 +1,23 @@
 <template>
-  <q-page class="flex justify-center" >
-    <Book v-if="auth.user?.uid"/>
+  <q-page class="flex justify-center">
+    <Main v-if="auth.user?.uid" />
   </q-page>
 </template>
 
 <script>
-import Book from 'src/components/Book/Main.vue'
-import { authStore } from 'stores/auth/'
+import Main from "src/components/Book/Main.vue";
+import { authStore } from "stores/auth/";
 
 export default {
-  name: 'index-page',
+  name: "index-page",
   components: {
-    Book
+    Main
   },
-  setup () {
-    const auth = authStore()
+  setup() {
+    const auth = authStore();
     return {
       auth
-    }
+    };
   }
-}
+};
 </script>

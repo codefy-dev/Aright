@@ -145,7 +145,6 @@ export default {
         });
         return;
       } else if (this.newPassword !== "" && this.currentPassword === "") {
-        console.log("updateProfile");
         this.$q.notify({
           color: "negative",
           text: this.$t("auth.currentPasswordRequiredToChangePassword")

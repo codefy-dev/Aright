@@ -9,10 +9,10 @@
     :width="200"
     :breakpoint="500"
     bordered
-    v-show="!book.empty"
+    v-if="user.hasBooks"
   >
     <q-scroll-area class="fit">
-      <BookList />
+      <Books />
     </q-scroll-area>
   </q-drawer>
 </template>
@@ -20,19 +20,22 @@
 <script>
 import { ref } from "vue";
 import { bookStore } from "src/stores/book";
-import BookList from "components/Book/List.vue";
+import Books from "src/components/Book/Books.vue";
+import { userStore } from "src/stores/user";
 
 export default {
   name: "left-menu",
   components: {
-    BookList
+    Books
   },
   setup() {
     const miniState = ref(true);
     const book = bookStore();
+    const user = userStore();
     return {
       miniState,
-      book
+      book,
+      user
     };
   }
 };

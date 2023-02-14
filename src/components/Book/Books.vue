@@ -12,6 +12,7 @@
       v-for="(book, index) in user.user.books"
       :key="index"
       @click="storeBook.setActiveBook(book)"
+      active-class="bg-green-1 text-primary"
     >
       <q-item-section avatar>
         <q-icon :name="book.icon || 'book'" />
@@ -26,21 +27,21 @@
 </template>
 
 <script>
-import { userStore  } from 'stores/user/'
-import { bookStore } from 'stores/book/'
-import Add from './Add.vue'
+import { userStore } from "stores/user/";
+import { bookStore } from "stores/book/";
+import Add from "./Add.vue";
 export default {
-  name: 'book-list',
+  name: "book-list",
   components: {
     Add
   },
-  setup () {
-    const user = userStore()
-    const storeBook = bookStore()
+  setup() {
+    const user = userStore();
+    const storeBook = bookStore();
     return {
       user,
       storeBook
-    }
+    };
   }
-}
+};
 </script>
