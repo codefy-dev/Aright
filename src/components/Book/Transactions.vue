@@ -69,10 +69,17 @@
         </q-item-section>
       </q-item>
       <q-item v-if="book.pagination.lastPage" class="justify-center">
-        <q-item-section avatar class="col-1">
+        <q-item-section
+          avatar
+          class="col-1"
+          v-if="book.book.length > book.pagination.minPerPage"
+        >
           <q-icon color="primary" name="hiking" />
         </q-item-section>
-        <q-item-section class="col-6 text-primary text-center">
+        <q-item-section
+          class="col-6 text-primary text-center q-mt-md"
+          v-if="book.book.length > book.pagination.minPerPage"
+        >
           Has llegado al final, No hay mas registros disponibles
         </q-item-section>
       </q-item>
