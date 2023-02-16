@@ -19,8 +19,7 @@
           <Transactions />
         </q-tab-panel>
         <q-tab-panel name="balances">
-          <div class="text-h6">Balances</div>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          <Balance />
         </q-tab-panel>
       </q-tab-panels>
     </q-card>
@@ -33,12 +32,14 @@
 <script>
 import { ref } from "vue";
 import Transactions from "src/components/Book/Transactions.vue";
+import Balance from "./Balance.vue";
 import { userStore } from "stores/user/";
 
 export default {
   name: "BookMain",
   components: {
-    Transactions
+    Transactions,
+    Balance
   },
   setup() {
     const tab = ref("transactions");
