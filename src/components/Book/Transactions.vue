@@ -60,10 +60,12 @@
             <span
               :class="[
                 'text-weight-regular',
-                parseInt(line.balance) > 0 ? 'text-positive' : 'text-negative'
+                parseInt(line.balance.balance) > 0
+                  ? 'text-positive'
+                  : 'text-negative'
               ]"
             >
-              {{ $filters.money(line.balance) }}
+              {{ $filters.money(line.balance.balance) }}
             </span>
           </q-item-label>
         </q-item-section>
@@ -164,13 +166,13 @@ export default {
       this.loading = false;
     },
     lineIcon(line) {
-      if (line.type === "inflow") {
+      if (line.type === "credit") {
         return "add";
       }
       return "remove";
     },
     lineColor(line) {
-      if (line.type === "inflow" || line.balance > 0) {
+      if (line.type === "credit" || line.balance.balance > 0) {
         return "positive";
       }
       return "negative";
@@ -183,7 +185,7 @@ export default {
   },
   computed: {
     balance() {
-      return this.$filters.money(this.book.balance);
+      return this.$filters.money(this.book.balance.balance);
     }
   },
   mounted() {

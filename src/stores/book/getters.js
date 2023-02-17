@@ -1,7 +1,11 @@
 import { Screen } from 'quasar'
 export default {
   balance (state) {
-    return state?.book[0]?.balance ?? 0
+    return state?.book[0]?.balance ?? {
+      balance: 0,
+      credit: 0,
+      debit: 0,
+    }
   },
   availableChannels () {
     return [

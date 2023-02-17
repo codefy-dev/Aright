@@ -20,7 +20,7 @@
         />
         <q-fab-action
           color="negative"
-          @click="openAddDialog('outflow')"
+          @click="openAddDialog('debit')"
           icon="shopping_cart"
           :label="$q.screen.gt.xs ? 'Egreso' : ''"
         />
@@ -35,7 +35,7 @@
       />
       <q-btn
         color="negative"
-        @click="openAddDialog('outflow')"
+        @click="openAddDialog('debit')"
         icon="shopping_cart"
         :label="'Egreso'"
       />
@@ -101,7 +101,7 @@ import { bookStore } from "stores/book/";
 const defaultLine = {
   description: "",
   amount: "",
-  type: "inflow",
+  type: "credit",
   channel: { label: "Transferencia", value: "transfer" }
 };
 
@@ -126,19 +126,19 @@ export default {
     };
   },
   methods: {
-    openAddDialog(type = "inflow") {
+    openAddDialog(type = "credit") {
       this.newLine = { ...defaultLine };
       this.newLine.type = type;
       this.addDialog = true;
     },
     acctionColor() {
-      return "inflow" === this.newLine.type ? "positive" : "negative";
+      return "credit" === this.newLine.type ? "positive" : "negative";
     },
     actionIcon() {
-      return "inflow" === this.newLine.type ? "savings" : "shopping_cart";
+      return "credit" === this.newLine.type ? "savings" : "shopping_cart";
     },
     actionTitle() {
-      return "inflow" === this.newLine.type ? "Entrada" : "Salida";
+      return "credit" === this.newLine.type ? "Entrada" : "Salida";
     },
     async add() {
       this.newLine.channel =
@@ -168,7 +168,7 @@ export default {
         "Prestamo"
       ];
       this.newLine = {
-        type: Math.random() < 0.5 ? "inflow" : "outflow",
+        type: Math.random() < 0.5 ? "credit" : "debit",
         description:
           mockDescriptions[Math.floor(Math.random() * mockDescriptions.length)],
         amount: Math.floor(Math.random() * (1000000 - 10000 + 1) + 10000),

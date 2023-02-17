@@ -42,20 +42,28 @@ export default {
   setup() {
     const balance = ref([
       {
-        name: "Juan",
-        balance: 400
-      },
-      {
         name: "Pedro",
-        balance: 200
-      },
-      {
-        name: "Maria",
-        balance: 150
+        balance: 10000,
+        credit: 10000,
+        debit: 0
       },
       {
         name: "Jose",
-        balance: -40
+        balance: 80000,
+        credit: 80000,
+        debit: 0
+      },
+      {
+        name: "Juan",
+        balance: 25000,
+        credit: 25000,
+        debit: 0
+      },
+      {
+        name: "Maria",
+        balance: 15000,
+        credit: 15000,
+        debit: 0
       }
     ]);
     return {
@@ -76,7 +84,19 @@ export default {
         value,
         label: (value * 100).toFixed(0) + "%"
       };
+      console.log(this.groupByPerson());
       return percentage;
+    },
+    groupByPerson() {
+      const grouped = this.balance.reduce((acc, cur) => {
+        if (acc[cur.name]) {
+          acc[cur.name] += cur.balance;
+        } else {
+          acc[cur.name] = cur.balance;
+        }
+        return acc;
+      }, {});
+      return grouped;
     }
   }
 };
