@@ -97,13 +97,18 @@ export default {
   },
   getBalance (line, balance = null) {
     balance = balance !== null ? balance : this.balance
-    return parseInt(balance) + parseInt(line.type === 'inflow' ? line.amount : line.amount * -1)
+    let newBalance = {
+      balance: parseInt(balance.balance) + parseInt(line.type === 'credit' ? line.amount : line.amount * -1),
+      credit: line.type === 'credit' ? parseInt(balance.credit) + parseInt(line.amount) : balance.credit,
+      debit: line.type === 'debit' ? parseInt(balance.debit) + parseInt(line.amount) : balance.debit,
+    }
+    return newBalance
   },
   async getMembersBalance (line) {
     const storedUser = userStore()
     let user = await storedUser.userInfo
     let membersBalance = this.membersBalance
-    let memberBalance = membersBalance[user.id] !== undefined ? membersBalance[user.id]?.balance : 0
+    let memberBalance = membersBalance[user.id] !== undefined ? membersBalance[user.id]?.balance : { balance: 0, credit: 0, debit: 0 }
     membersBalance[user.id] = {
       id: user.id,
       name: user.displayName,
