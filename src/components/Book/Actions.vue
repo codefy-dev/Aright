@@ -5,13 +5,13 @@
         color="primary"
         icon="add"
         direction="left"
-        :label="$q.screen.gt.xs ? 'Agregar Registro' : ''"
+        :label="$q.screen.gt.xs ? $t('book.addRegister') : ''"
       >
         <q-fab-action
           color="positive"
           @click="openAddDialog()"
           icon="savings"
-          :label="$q.screen.gt.xs ? 'Ingreso' : ''"
+          :label="$q.screen.gt.xs ? $t('book.credit') : ''"
         />
         <q-fab-action
           color="secondary"
@@ -22,7 +22,7 @@
           color="negative"
           @click="openAddDialog('debit')"
           icon="shopping_cart"
-          :label="$q.screen.gt.xs ? 'Egreso' : ''"
+          :label="$q.screen.gt.xs ? $t('book.debit') : ''"
         />
       </q-fab>
     </q-page-sticky>
@@ -31,13 +31,13 @@
         color="positive"
         @click="openAddDialog()"
         icon="savings"
-        :label="'Ingreso'"
+        :label="$t('book.credit')"
       />
       <q-btn
         color="negative"
         @click="openAddDialog('debit')"
         icon="shopping_cart"
-        :label="'Egreso'"
+        :label="$t('book.debit')"
       />
     </div>
     <q-dialog v-model="addDialog">
@@ -49,7 +49,7 @@
               :color="acctionColor()"
               text-color="white"
             />
-            Nuevo Registro de
+            {{ $t("book.new") }}
             <strong :class="['text-' + acctionColor()]">{{
               actionTitle()
             }}</strong
@@ -61,27 +61,27 @@
             <q-input
               outlined
               v-model.number="newLine.amount"
-              label="Monto"
+              :label="$t('book.amount')"
               required
               type="number"
             />
             <q-select
               outlined
               v-model="newLine.channel"
-              :options="book.availableChannels"
-              label="Tipo de Transacción"
+              :options="book.availableGateways"
+              :label="$t('book.gateway')"
               required
             />
             <q-input
               outlined
               v-model="newLine.description"
-              label="Descripción"
+              :label="$t('book.description')"
               required
             />
             <q-card-actions align="right">
               <q-btn
                 color="primary"
-                label="Guardar"
+                :label="$t('book.save')"
                 icon="save"
                 type="submit"
                 :loading="loading"
@@ -98,13 +98,6 @@
 import { ref } from "vue";
 import { bookStore } from "stores/book/";
 
-const defaultLine = {
-  description: "",
-  amount: "",
-  type: "credit",
-  channel: { label: "Transferencia", value: "transfer" }
-};
-
 export default {
   name: "cash-flow-actions",
   props: {
@@ -116,7 +109,12 @@ export default {
   setup() {
     const book = bookStore();
     const addDialog = ref(false);
-    const newLine = ref(defaultLine);
+    const newLine = ref({
+      description: "",
+      amount: "",
+      type: "credit",
+      channel: {}
+    });
     const loading = ref(false);
     return {
       addDialog,
@@ -127,7 +125,12 @@ export default {
   },
   methods: {
     openAddDialog(type = "credit") {
-      this.newLine = { ...defaultLine };
+      this.newLine = {
+        description: "",
+        amount: "",
+        type: "credit",
+        channel: this.book.availableGateways[0]
+      };
       this.newLine.type = type;
       this.addDialog = true;
     },
@@ -138,7 +141,9 @@ export default {
       return "credit" === this.newLine.type ? "savings" : "shopping_cart";
     },
     actionTitle() {
-      return "credit" === this.newLine.type ? "Entrada" : "Salida";
+      return "credit" === this.newLine.type
+        ? this.$t("book.credit")
+        : this.$t("book.debit");
     },
     async add() {
       this.newLine.channel =
@@ -173,8 +178,8 @@ export default {
           mockDescriptions[Math.floor(Math.random() * mockDescriptions.length)],
         amount: Math.floor(Math.random() * (1000000 - 10000 + 1) + 10000),
         channel:
-          this.book.availableChannels[
-            Math.floor(Math.random() * this.book.availableChannels.length)
+          this.book.availableGateways[
+            Math.floor(Math.random() * this.book.availableGateways.length)
           ]
       };
       await this.add();

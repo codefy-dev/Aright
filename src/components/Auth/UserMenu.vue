@@ -12,17 +12,19 @@
         </div>
         <q-separator vertical inset class="q-mx-lg" />
         <div class="column">
-          <div class="text-subtitle1 q-mb-md text-grey">Configuración</div>
+          <div class="text-subtitle1 q-mb-md text-grey">
+            {{ $t("auth.settings") }}
+          </div>
           <q-toggle
             size="sm"
-            label="Modo Dark"
+            :label="$t('auth.darkMode')"
             class="text-primary"
             v-model="darkMode"
             @update:model-value="auth.toggleDarkMode()"
           />
           <q-separator />
           <q-btn
-            label="Logout"
+            :label="$t('auth.logout')"
             icon="logout"
             size="sm"
             flat

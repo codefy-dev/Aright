@@ -2,7 +2,7 @@
   <q-list padding v-if="user?.user.id">
     <q-item>
       <q-item-section>
-        <q-item-label caption>Libros</q-item-label>
+        <q-item-label caption>{{ $t("book.books") }}</q-item-label>
       </q-item-section>
     </q-item>
     <q-item

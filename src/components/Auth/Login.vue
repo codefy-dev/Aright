@@ -7,7 +7,7 @@
         </div>
       </q-img>
       <q-card-section>
-        <div class="text-h6">Inicio de sesión</div>
+        <div class="text-h6">{{ $t("auth.loginTitle") }}</div>
       </q-card-section>
       <q-card-section>
         <q-form @submit="submitForm" autocomplete="off">
@@ -16,10 +16,10 @@
             class="q-mb-md"
             outlined
             type="email"
-            label="Email"
+            :label="$t('auth.email')"
             :rules="[
-              (val) => !!val || 'Email Requerido',
-              isValidEmail || 'Email Invalido'
+              (val) => !!val || $t('auth.emailIsRequired'),
+              isValidEmail
             ]"
             lazy-rules
           />
@@ -27,9 +27,9 @@
             v-model="formData.password"
             outlined
             :type="isPwd ? 'password' : 'text'"
-            label="Contraseña"
+            :label="$t('auth.password')"
             ref="password"
-            :rules="[(val) => !!val || 'Contraseña Requerida']"
+            :rules="[(val) => !!val || $t('auth.passwordIsRequired')]"
             lazy-rules
             @keyup.enter="submitForm"
           >
@@ -43,7 +43,7 @@
           </q-input>
           <div class="row">
             <q-space />
-            <q-btn color="primary" type="submit" label="Login" />
+            <q-btn color="primary" type="submit" :label="$t('auth.login')" />
           </div>
         </q-form>
       </q-card-section>
@@ -80,7 +80,7 @@ export default {
     isValidEmail(val) {
       const emailPattern =
         /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
-      return emailPattern.test(val) || "Email Invalido";
+      return emailPattern.test(val) || this.$t("auth.emailIsInvalid");
     }
   },
   computed: {

@@ -3,7 +3,13 @@
     <q-list separator dense class="book fit vertical-top" v-if="!loading">
       <q-item class="justify-end" v-if="!book.empty">
         <q-item-section class="col-5">
-          <q-input outlined label="Balance" v-model="balance" dense readonly>
+          <q-input
+            outlined
+            :label="$t('book.balance')"
+            v-model="balance"
+            dense
+            readonly
+          >
             <template v-slot:prepend>
               <q-icon name="attach_money" />
             </template>
@@ -15,8 +21,8 @@
           <q-item-label caption
             ><small class="text-grey-8">{{
               $filters.dateOrTime(line.created_at)
-            }}</small></q-item-label
-          >
+            }}</small>
+          </q-item-label>
           <q-icon :name="lineIcon(line)" :color="lineColor(line)" />
         </q-item-section>
         <q-item-section
@@ -44,7 +50,7 @@
           side
           class="col-xs-3 col-sm-3 col-md-2 col-lg-2 col-xl-2"
         >
-          <q-item-label caption>Monto</q-item-label>
+          <q-item-label caption>{{ $t("book.amount") }}</q-item-label>
           <q-item-label lines="1">
             <span :class="['text-weight-regular', 'text-' + lineColor(line)]">
               {{ $filters.money(line.amount) }}
@@ -55,7 +61,7 @@
           side
           class="col-xs-3 col-sm-3 col-md-2 col-lg-2 col-xl-2"
         >
-          <q-item-label caption>Saldo</q-item-label>
+          <q-item-label caption>{{ $t("book.balance") }}</q-item-label>
           <q-item-label lines="1">
             <span
               :class="[
@@ -82,7 +88,7 @@
           class="col-6 text-primary text-center q-mt-md"
           v-if="book.book.length > book.pagination.minPerPage"
         >
-          Has llegado al final, No hay mas registros disponibles
+          {{ $t("book.endOfTheRecords") }}
         </q-item-section>
       </q-item>
       <q-item v-else-if="!book.empty" class="justify-center">
@@ -102,9 +108,9 @@
             <div class="absolute-bottom text-center">
               <div class="text-h6">
                 <q-icon size="md" name="pending" />
-                No hay registros aun para mostrar
+                {{ $t("book.noRecords") }}
               </div>
-              <div class="text-subtitle2">Ingresa tu primer movimiento</div>
+              <div class="text-subtitle2">{{ $t("book.addFirstRecord") }}</div>
               <q-separator spaced inset dark />
               <div class="full-width"><Actions :sticky="false" /></div>
             </div>
@@ -178,7 +184,7 @@ export default {
       return "negative";
     },
     lineChannel(line) {
-      return this.book?.availableChannels?.find(
+      return this.book?.availableGateways?.find(
         (channel) => channel.value === line.channel
       );
     }

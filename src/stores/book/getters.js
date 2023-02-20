@@ -1,4 +1,6 @@
 import { Screen } from 'quasar'
+import { i18n } from '../../boot/i18n';
+
 export default {
   balance (state) {
     return state?.book[0]?.balance ?? {
@@ -7,35 +9,30 @@ export default {
       debit: 0,
     }
   },
-  availableChannels () {
+  availableGateways () {
     return [
       {
-        label: 'Transferencia',
+        label: i18n.global.t('book.gateways.transfer'),
         value: 'transfer',
         icon: 'devices'
       },
       {
-        label: 'Efectivo',
+        label: i18n.global.t('book.gateways.cash'),
         value: 'cash',
         icon: 'payments'
       },
       {
-        label: 'Tarjeta de Crédito',
+        label: i18n.global.t('book.gateways.creditCard'),
         value: 'credit_card',
         icon: 'credit_card'
       },
       {
-        label: 'Tarjeta de Débito',
+        label: i18n.global.t('book.gateways.debitCard'),
         value: 'debit_card',
         icon: 'credit_card'
       },
       {
-        label: 'Cheque',
-        value: 'check',
-        icon: 'subtitles'
-      },
-      {
-        label: 'Otro',
+        label: i18n.global.t('book.gateways.other'),
         value: 'other',
         icon: 'credit_card'
       },

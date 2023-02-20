@@ -10,13 +10,13 @@
         align="justify"
         narrow-indicator
       >
-        <q-tab name="transactions" label="Transactions" />
-        <q-tab name="balances" label="Balances" />
+        <q-tab name="records" :label="$t('book.records')" />
+        <q-tab name="balances" :label="$t('book.balances')" />
       </q-tabs>
       <q-separator />
       <q-tab-panels v-model="tab" animated swipeable infinite keep-alive>
-        <q-tab-panel name="transactions">
-          <Transactions />
+        <q-tab-panel name="records">
+          <records />
         </q-tab-panel>
         <q-tab-panel name="balances">
           <Balance />
@@ -24,25 +24,25 @@
       </q-tab-panels>
     </q-card>
     <q-card v-else square>
-      <Transactions />
+      <Records />
     </q-card>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import Transactions from "src/components/Book/Transactions.vue";
+import Records from "src/components/Book/Records.vue";
 import Balance from "./Balance.vue";
 import { userStore } from "stores/user/";
 
 export default {
   name: "BookMain",
   components: {
-    Transactions,
+    Records,
     Balance
   },
   setup() {
-    const tab = ref("transactions");
+    const tab = ref("records");
     const user = userStore();
     return {
       tab,
