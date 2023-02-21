@@ -78,8 +78,9 @@ export default {
     membersCountMessage: '{count} Miembro de {max} | {count} Miembros de {max}',
     me: 'Yo',
     deleteBook: 'Eliminar libro',
-    deleteBookMessage: '¿Estás seguro de eliminar este libro? <br/> Esta acción no se puede deshacer',
+    deleteBookMessage: '¿Estás seguro de eliminar {bookName}? <br/> Esta acción no se puede deshacer',
     deleteLine: 'Eliminar línea',
     deleteLineMessage: '¿Estás seguro de eliminar este registro? <br/> Esta acción no se puede deshacer',
+    share: 'Compartir libro',
   }
 }

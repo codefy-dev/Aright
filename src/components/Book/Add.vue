@@ -159,7 +159,12 @@
             color="negative"
             v-close-popup
           />
-          <q-btn :label="$t('book.add')" color="primary" @click="addBook" />
+          <q-btn
+            :label="$t('book.add')"
+            color="primary"
+            @click="addBook"
+            icon="add"
+          />
         </q-card-actions>
         <q-inner-loading :showing="loading" />
       </q-form>

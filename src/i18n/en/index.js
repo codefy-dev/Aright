@@ -80,8 +80,9 @@ export default {
     membersCountMessage: '{count} Member of {max} | {count} Members of {max}',
     me: 'Me',
     deleteBook: 'Delete Book',
-    deleteBookMessage: 'Are you sure you want to delete this book? <br/> This action cannot be undone',
+    deleteBookMessage: 'Are you sure you want to delete {bookName}? <br/> This action cannot be undone',
     deleteLine: 'Delete Line',
     deleteLineMessage: 'Are you sure you want to delete this record? <br/> This action cannot be undone',
+    share: 'Share',
   }
 }

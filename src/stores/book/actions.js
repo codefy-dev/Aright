@@ -151,7 +151,7 @@ export default {
     if (book.created_by === user.id) {
       Dialog.create({
         title: i18n.global.t('book.deleteBook'),
-        message: i18n.global.t('book.deleteBookMessage'),
+        message: i18n.global.t('book.deleteBookMessage', { bookName: book.name }),
         cancel: true,
         persistent: true
       }).onOk(async () => {
