@@ -84,6 +84,7 @@ export default {
       storedUser.user.activedBook = book.id
       storedUser.user.books[book.id] = { ...book, active: true }
       await storedUser.updateUser()
+      this.tab = 'records'
       this.pagination.page = 1
       this.pagination.lastPage = false
       this.book = []

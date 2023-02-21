@@ -3,9 +3,10 @@ import { createI18n } from 'vue-i18n'
 import messages from 'src/i18n'
 
 const i18n = createI18n({
-  locale: 'en',
+  locale: navigator.language.split('-')[0],
   messages,
   globalInjection: true,
+  fallbackLocale: 'en',
 })
 
 export default boot(({ app }) => {

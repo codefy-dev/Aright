@@ -84,7 +84,7 @@ export default {
         value,
         label: (value * 100).toFixed(0) + "%"
       };
-      console.log(this.groupByPerson());
+      // console.log(this.groupByPerson());
       return percentage;
     },
     groupByPerson() {
