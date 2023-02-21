@@ -28,7 +28,7 @@ export default {
     Loading.show()
     const storedUser = userStore()
     let user = await storedUser.userInfo
-    if (!user.activedBook) {
+    if (!user.activedBook) { // If user has no book, create a personal book
       await this.addBook({
         name: 'Personal',
         icon: 'book',
@@ -54,7 +54,6 @@ export default {
     let newBook = {
       created_by: user.id,
       created_at: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
-      members: [user.id],
       ...book,
     }
     let booksCollection = collection(firebaseDb, 'books')
@@ -125,6 +124,48 @@ export default {
       membersBalance[member.id] = member
     })
     return membersBalance
+  },
+  async deleteLine (line) {
+    const storedUser = userStore()
+    let user = await storedUser.userInfo
+    if (line.created_by === user.id && line.id === this.book[0].id) {
+      Dialog.create({
+        title: i18n.global.t('book.deleteLine'),
+        message: i18n.global.t('book.deleteLineMessage'),
+        cancel: true,
+        persistent: true
+      }).onOk(async () => {
+        Loading.show()
+        let bookCollection = collection(firebaseDb, 'books', user.activedBook, 'lines')
+        await deleteDoc(doc(bookCollection, line.id))
+        this.book.shift()
+        this.balance = this.getBalance(line)
+        this.membersBalance = await this.getMembersBalance(line)
+        Loading.hide()
+      })
+    }
+  },
+  async deleteBook (book) {
+    const storedUser = userStore()
+    let user = await storedUser.userInfo
+    if (book.created_by === user.id) {
+      Dialog.create({
+        title: i18n.global.t('book.deleteBook'),
+        message: i18n.global.t('book.deleteBookMessage'),
+        cancel: true,
+        persistent: true
+      }).onOk(async () => {
+        Loading.show()
+        let bookCollection = collection(firebaseDb, 'books')
+        await bookCollection.doc(book.id).delete()
+        delete storedUser.user.books[book.id]
+        if (user.activedBook === book.id) {
+          storedUser.user.activedBook = null
+        }
+        await storedUser.updateUser()
+        Loading.hide()
+      })
+    }
   }
 
 }

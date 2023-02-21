@@ -13,6 +13,7 @@ export const bookStore = defineStore('book', {
     },
     leftMenu: false,
     tab: 'records',
+    maxMembers: 5,
   }),
   getters,
   actions,
