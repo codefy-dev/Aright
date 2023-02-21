@@ -13,5 +13,8 @@ export default {
   },
   hasBooks (state) {
     return state.user?.books?.length !== 0
+  },
+  isOwner (state) {
+    return state.user?.id === this.activeBook?.created_by
   }
 }

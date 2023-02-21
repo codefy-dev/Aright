@@ -2,7 +2,7 @@
   <q-btn flat icon="more_vert" color="segundary">
     <q-menu auto-close anchor="bottom right" self="top right">
       <q-list class="text-segundary">
-        <q-item clickable>
+        <q-item clickable v-if="user.isOwner">
           <q-item-section avatar>
             <q-icon name="edit" />
           </q-item-section>
@@ -25,16 +25,13 @@
 
 <script>
 import { userStore } from "stores/user/";
-import { bookStore } from "src/stores/book";
 
 export default {
   name: "book-menu",
   setup() {
     const user = userStore();
-    const book = bookStore();
     return {
-      user,
-      book
+      user
     };
   }
 };
