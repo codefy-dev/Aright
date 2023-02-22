@@ -109,7 +109,7 @@
                       </q-popup-edit>
                     </q-item-label>
                     <q-tooltip v-if="!member.owner">
-                      {{ $t("book.edit") }}
+                      {{ $t("edit") }}
                     </q-tooltip>
                   </q-item-section>
                   <q-item-section v-if="member.owner" avatar>
@@ -153,14 +153,9 @@
         </q-card-section>
         <q-separator color="primary" inset />
         <q-card-actions align="right">
+          <q-btn flat :label="$t('cancel')" color="negative" v-close-popup />
           <q-btn
-            flat
-            :label="$t('book.cancel')"
-            color="negative"
-            v-close-popup
-          />
-          <q-btn
-            :label="$t('book.add')"
+            :label="$t('add')"
             color="primary"
             @click="addBook"
             icon="add"

@@ -1,6 +1,6 @@
 import { firebaseDb } from '../../boot/firebase'
 import { Loading, date, Screen, Notify } from 'quasar'
-import { collection, query, getDocs, orderBy, addDoc, limit, startAfter } from "firebase/firestore";
+import { collection, query, getDocs, orderBy, addDoc, limit, startAfter, setDoc, doc } from "firebase/firestore";
 import { userStore } from '../user/index.js'
 import { i18n } from '../../boot/i18n';
 
@@ -165,6 +165,24 @@ export default {
         await storedUser.updateUser()
         Loading.hide()
       })
+    }
+  },
+  async getBook (bookId) {
+    const storedUser = userStore()
+    let user = await storedUser.userInfo
+    return user.books[bookId]
+  },
+  async editBook (book) {
+    const storedUser = userStore()
+    let user = await storedUser.userInfo
+    console.log(book, user.id)
+    if (book.created_by === user.id) {
+      Loading.show()
+      let bookCollection = collection(firebaseDb, 'books')
+      await setDoc(doc(bookCollection, book.id), book)
+      storedUser.user.books[book.id] = book
+      await storedUser.updateUser()
+      Loading.hide()
     }
   }
 

@@ -81,7 +81,7 @@
             <q-card-actions align="right">
               <q-btn
                 color="primary"
-                :label="$t('book.add')"
+                :label="$t('add')"
                 icon="add"
                 type="submit"
                 :loading="loading"

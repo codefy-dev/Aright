@@ -1,9 +1,10 @@
 
 export default {
-  languageName: 'English',
   edit: 'Edit',
   cancel: 'Cancel',
   save: 'Save',
+  error: 'Error',
+  add: 'Add',
   auth: {
     loginTitle: 'Login',
     login: 'Login',
@@ -51,14 +52,12 @@ export default {
     amount: 'Amount',
     description: 'Description',
     gateway: 'Gateway',
-    save: 'Save',
     newBook: 'New Book',
+    editBook: 'Edit Book',
     name: 'Name',
     multiBalanceTitle: 'Multi Balance',
     multiBalanceDescription: 'Multiple people, individual balance based on their contributions and withdrawals',
     icon: 'Icon',
-    cancel: 'Cancel',
-    add: 'Add',
     books: 'Books',
     records: 'Records',
     balances: 'Balances',
@@ -73,7 +72,6 @@ export default {
       transfer: 'Transfer',
       other: 'Other',
     },
-    edit: 'Edit',
     owner: 'Owner',
     newMember: 'New Member',
     nameIsRequired: 'Name is required and must be at least 3 characters long',
@@ -84,5 +82,6 @@ export default {
     deleteLine: 'Delete Line',
     deleteLineMessage: 'Are you sure you want to delete this record? <br/> This action cannot be undone',
     share: 'Share',
+    memberAlreadyInUse: 'Name already in use',
   }
 }

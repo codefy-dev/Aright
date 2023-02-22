@@ -1,9 +1,10 @@
 
 export default {
-  languageName: 'Español',
   edit: 'Editar',
   cancel: 'Cancelar',
   save: 'Guardar',
+  error: 'Error',
+  add: 'Agregar',
   auth: {
     loginTitle: 'Inicio de sesión',
     login: 'Iniciar sesión',
@@ -49,14 +50,12 @@ export default {
     amount: 'Monto',
     description: 'Descripción',
     gateway: 'Pasarela',
-    save: 'Guardar',
     newBook: 'Nuevo libro',
+    editBook: 'Editar libro',
     name: 'Nombre',
     multiBalanceTitle: 'Balance múltiple',
     multiBalanceDescription: 'Multiples personas, balance induividual basado en sus contribuciones y retiros',
     icon: 'Icono',
-    cancel: 'Cancelar',
-    add: 'Agregar',
     books: 'Libros',
     records: 'Registros',
     balances: 'Balances',
@@ -82,5 +81,6 @@ export default {
     deleteLine: 'Eliminar línea',
     deleteLineMessage: '¿Estás seguro de eliminar este registro? <br/> Esta acción no se puede deshacer',
     share: 'Compartir libro',
+    memberAlreadyInUse: 'El nombre ya está en uso',
   }
 }

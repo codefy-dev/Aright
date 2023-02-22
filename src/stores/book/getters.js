@@ -9,6 +9,17 @@ export default {
       debit: 0,
     }
   },
+  linesPerPage (state) {
+    let minPerPage = state.pagination.minPerPage
+    let posibleLines = Math.floor(Screen.height / 50)
+    return posibleLines < minPerPage ? minPerPage : posibleLines
+  },
+  empty (state) {
+    return state.book.length === 0
+  },
+  membersBalance (state) {
+    return state?.book[0]?.members_balance ?? {}
+  },
   availableGateways () {
     return [
       {
@@ -37,16 +48,5 @@ export default {
         icon: 'credit_card'
       },
     ]
-  },
-  linesPerPage (state) {
-    let minPerPage = state.pagination.minPerPage
-    let posibleLines = Math.floor(Screen.height / 50)
-    return posibleLines < minPerPage ? minPerPage : posibleLines
-  },
-  empty (state) {
-    return state.book.length === 0
-  },
-  membersBalance (state) {
-    return state?.book[0]?.members_balance ?? {}
   }
 }
