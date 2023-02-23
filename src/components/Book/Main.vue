@@ -1,6 +1,6 @@
 <template>
   <div class="q-gutter-y-sm q-mt-none" style="width: 100%; max-width: 900px">
-    <q-card v-if="user.activedBookIsMultiBalance" square>
+    <q-card square>
       <q-toolbar class="">
         <q-tabs
           v-model="book.tab"
@@ -21,6 +21,7 @@
             name="balances"
             :label="$t('book.balances')"
             icon="bar_chart"
+            v-if="user.activedBookIsMultiBalance"
           />
         </q-tabs>
         <q-space />
@@ -31,13 +32,10 @@
         <q-tab-panel name="records">
           <records />
         </q-tab-panel>
-        <q-tab-panel name="balances">
+        <q-tab-panel name="balances" v-if="user.activedBookIsMultiBalance">
           <Balance />
         </q-tab-panel>
       </q-tab-panels>
-    </q-card>
-    <q-card v-else square>
-      <Records />
     </q-card>
   </div>
 </template>

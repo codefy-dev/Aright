@@ -246,7 +246,7 @@ export default {
   },
   async mounted() {
     if (this.bookId) {
-      this.book = await this.storeBook.getBook(this.bookId);
+      this.book = { ...(await this.storeBook.getBook(this.bookId)) };
       this.edit = this.book?.id ? true : false;
       this.isReady = true;
     }
