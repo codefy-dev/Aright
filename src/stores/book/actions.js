@@ -1,6 +1,6 @@
 import { firebaseDb } from '../../boot/firebase'
-import { Loading, date, Screen, Notify } from 'quasar'
-import { collection, query, getDocs, orderBy, addDoc, limit, startAfter, setDoc, doc } from "firebase/firestore";
+import { Loading, date, Screen, Notify, Dialog } from 'quasar'
+import { collection, query, getDocs, orderBy, addDoc, limit, startAfter, setDoc, doc, Timestamp } from "firebase/firestore";
 import { userStore } from '../user/index.js'
 import { i18n } from '../../boot/i18n';
 
@@ -32,12 +32,13 @@ export default {
       await this.addBook({
         name: 'Personal',
         icon: 'book',
-        multi_balance: false
+        multi_balance: false,
+        members: [user.id],
       })
     }
     let newLine = {
       created_by: user.id,
-      created_at: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
+      created_at: Timestamp.now(),
       balance: this.getBalance(line),
       members_balance: await this.getMembersBalance(line),
       multi_balance: storedUser.activedBookIsMultiBalance,
@@ -53,7 +54,8 @@ export default {
     let user = await storedUser.userInfo
     let newBook = {
       created_by: user.id,
-      created_at: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
+      created_at: Timestamp.now(),
+      status: 'active',
       ...book,
     }
     let booksCollection = collection(firebaseDb, 'books')
@@ -152,16 +154,39 @@ export default {
       Dialog.create({
         title: i18n.global.t('book.deleteBook'),
         message: i18n.global.t('book.deleteBookMessage', { bookName: book.name }),
-        cancel: true,
-        persistent: true
+        cancel: {
+          flat: true,
+          color: 'primary'
+        },
+        ok: {
+          label: i18n.global.t('delete'),
+          color: 'negative',
+          icon: 'delete',
+        },
+        persistent: true,
+        html: true
       }).onOk(async () => {
         Loading.show()
-        let bookCollection = collection(firebaseDb, 'books')
-        await bookCollection.doc(book.id).delete()
-        delete storedUser.user.books[book.id]
-        if (user.activedBook === book.id) {
-          storedUser.user.activedBook = null
+        let deletedBook = {
+          ...book,
+          status: 'deleted',
+          deleted_at: Timestamp.now()
         }
+        await this.editBook(deletedBook, {
+          message: i18n.global.t('book.deleteBookSuccess'),
+          color: 'positive',
+          icon: 'delete'
+        })
+        let OldBooks = Object.keys(storedUser.user.books).filter(b => b !== book.id)
+        let newBooks = {}
+        OldBooks.forEach(b => {
+          newBooks[b] = storedUser.user.books[b]
+          if (Object.keys(newBooks).length === 1) {
+            newBooks[b].active = true
+            storedUser.user.activedBook = b
+          }
+        })
+        storedUser.user.books = newBooks
         await storedUser.updateUser()
         Loading.hide()
       })
@@ -172,10 +197,13 @@ export default {
     let user = await storedUser.userInfo
     return user.books[bookId]
   },
-  async editBook (book) {
+  async editBook (book, succeesMessage = {
+    message: i18n.global.t('book.editBookSuccess'),
+    color: 'positive',
+    icon: 'check_circle'
+  }) {
     const storedUser = userStore()
     let user = await storedUser.userInfo
-    console.log(book, user.id)
     if (book.created_by === user.id) {
       Loading.show()
       let bookCollection = collection(firebaseDb, 'books')
@@ -183,6 +211,7 @@ export default {
       storedUser.user.books[book.id] = book
       await storedUser.updateUser()
       Loading.hide()
+      Notify.create(succeesMessage)
     }
   }
 

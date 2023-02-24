@@ -1,13 +1,17 @@
 <template>
   <q-card v-if="isReady">
     <q-form>
-      <q-card-section class="text-subtitle2 text-primary">
-        <q-icon
-          :name="edit ? 'edit' : 'add_circle'"
-          color="primary"
-          size="md"
-        />
-        {{ edit ? $t("book.editBook") : $t("book.newBook") }}
+      <q-card-section class="text-subtitle2 text-primary row items-center">
+        <div class="text-h6">
+          <q-icon
+            :name="edit ? 'edit' : 'add_circle'"
+            color="primary"
+            size="md"
+          />
+          {{ edit ? $t("book.editBook") : $t("book.newBook") }}
+        </div>
+        <q-space />
+        <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
       <q-separator color="primary" inset />
       <q-card-section class="row items-center">
@@ -139,8 +143,16 @@
         </q-item>
       </q-card-section>
       <q-separator color="primary" inset />
-      <q-card-actions align="right">
-        <q-btn flat :label="$t('cancel')" color="negative" v-close-popup="-1" />
+      <q-card-actions align="around">
+        <q-btn
+          flat
+          :label="$t('delete')"
+          color="negative"
+          v-close-popup="-1"
+          icon="delete"
+          @click="storeBook.deleteBook(book)"
+          v-if="edit"
+        />
         <q-btn
           :label="edit ? $t('save') : $t('add')"
           color="primary"

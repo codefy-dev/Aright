@@ -5,6 +5,7 @@ export default {
   save: 'Guardar',
   error: 'Error',
   add: 'Agregar',
+  delete: 'Eliminar',
   auth: {
     loginTitle: 'Inicio de sesión',
     login: 'Iniciar sesión',
@@ -52,6 +53,7 @@ export default {
     gateway: 'Pasarela',
     newBook: 'Nuevo libro',
     editBook: 'Editar libro',
+    editBookSuccess: 'Libro actualizado correctamente',
     name: 'Nombre',
     multiBalanceTitle: 'Balance múltiple',
     multiBalanceDescription: 'Multiples personas, balance induividual basado en sus contribuciones y retiros',
@@ -78,8 +80,10 @@ export default {
     me: 'Yo',
     deleteBook: 'Eliminar libro',
     deleteBookMessage: '¿Estás seguro de eliminar {bookName}? <br/> Esta acción no se puede deshacer',
+    deleteBookSuccess: 'Libro eliminado correctamente',
     deleteLine: 'Eliminar línea',
     deleteLineMessage: '¿Estás seguro de eliminar este registro? <br/> Esta acción no se puede deshacer',
+    deleteLineSuccess: 'Registro eliminado correctamente',
     share: 'Compartir libro',
     memberAlreadyInUse: 'El nombre ya está en uso',
   }

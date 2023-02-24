@@ -152,7 +152,12 @@ export default {
       await this.book.addLine(this.newLine);
       this.loading = false;
       this.addDialog = false;
-      this.newLine = defaultLine;
+      this.newLine = {
+        description: "",
+        amount: "",
+        type: "credit",
+        channel: this.book.availableGateways[0]
+      };
     },
     async mockLine() {
       let mockDescriptions = [
