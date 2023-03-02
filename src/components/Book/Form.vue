@@ -56,7 +56,10 @@
             </q-item-label>
           </q-item-section>
           <q-item-section avatar top>
-            <q-toggle v-model="book.multi_balance" />
+            <q-toggle
+              v-model="book.multi_balance"
+              @update:model-value="toggleMemberList"
+            />
           </q-item-section>
         </q-item>
       </q-card-section>
@@ -232,9 +235,9 @@ export default {
       newMemberInput.value.resetValidation();
     };
 
-    const toggleMemberList = () => {
-      if (!edit.value && !book.value.multi_balance) {
-        book.value.membersInfo = [
+    const toggleMemberList = (value) => {
+      if (value && !book.value.membersInfo) {
+        book.value["membersInfo"] = [
           {
             id: user.user.id,
             displayName: user.user.displayName,
