@@ -12,7 +12,8 @@
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
     "build": "quasar build",
-    "build:pwa": "quasar build -m pwa"
+    "build:pwa": "quasar build -m pwa",
+    "build:pwa:debug": "quasar build -m pwa --debug"
   },
   "dependencies": {
     "@capacitor/app": "^1.0.0",
