@@ -15,6 +15,8 @@ import { i18n } from '../../boot/i18n';
 import zxcvbn from 'zxcvbn'
 import md5 from 'md5'
 
+const $t = i18n.global.t;
+
 
 export default {
   login (payload) {
@@ -27,7 +29,7 @@ export default {
       const errorCode = error.code;
       console.error(error)
       Notify.create({
-        message: i18n.global.t('auth.problemTryingToLogin') + ' | ' + errorCode,
+        message: $t('auth.problemTryingToLogin') + ' | ' + errorCode,
         type: 'negative'
       })
     });
@@ -51,13 +53,13 @@ export default {
     firebaseUpdateProfile(firebaseAuth.currentUser, payload).then(() => {
       this.user.loading = false
       Notify.create({
-        message: i18n.global.t('auth.profileUpdated'),
+        message: $t('auth.profileUpdated'),
         type: 'positive'
       })
       if (payload.passwords) {
         this.updatePassword(payload.passwords).catch(error => {
           Notify.create({
-            message: i18n.global.t('auth.problemChangingPassword') + ' | ' + error.code,
+            message: $t('auth.problemChangingPassword') + ' | ' + error.code,
             type: 'negative'
           })
         })
@@ -66,7 +68,7 @@ export default {
       this.user.loading = false
       console.error(error)
       Notify.create({
-        message: i18n.global.t('auth.problemUpdatingProfile') + ' | ' + error.code,
+        message: $t('auth.problemUpdatingProfile') + ' | ' + error.code,
         type: 'negative'
       })
     })
@@ -77,14 +79,14 @@ export default {
         this.user.loading = true
         if (this.passwordStrength(passwords.new).score < 2) {
           reject({
-            message: i18n.global.t('auth.passwordWeak'),
-            code: i18n.global.t('auth.passwordWeak')
+            message: $t('auth.passwordWeak'),
+            code: $t('auth.passwordWeak')
           })
         }
         firebaseUpdatePassword(firebaseAuth.currentUser, passwords.new).then(() => {
           this.user.loading = false
           Notify.create({
-            message: i18n.global.t('auth.passwordUpdated'),
+            message: $t('auth.passwordUpdated'),
             type: 'positive'
           })
           resolve()
@@ -113,7 +115,7 @@ export default {
     return {
       score,
       color: ['red', 'red', 'deep-orange', 'orange', 'green'][score],
-      text: i18n.global.t('auth.passwordStrength', { score }),
+      text: $t('auth.passwordStrength', { score }),
       values: Array(5).fill().map((_, idx) => {
         if (score == 0 || score < idx - 1) {
           return 0

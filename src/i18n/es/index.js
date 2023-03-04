@@ -86,5 +86,8 @@ export default {
     deleteLineSuccess: 'Registro eliminado correctamente',
     share: 'Compartir libro',
     memberAlreadyInUse: 'El nombre ya está en uso',
+    maxBooksMessage: 'Has alcanzado el máximo de libros permitidos',
+    membersIsRequired: 'El libro debe tener al menos un miembro',
+    maxMembersMessage: 'El máximo de miembros permitidos es {max}',
   }
 }

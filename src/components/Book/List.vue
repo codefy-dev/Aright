@@ -22,18 +22,19 @@
       </q-item-section>
     </q-item>
     <q-separator />
-    <Add />
+    <AddButton />
   </q-list>
 </template>
 
 <script>
 import { userStore } from "stores/user/";
 import { bookStore } from "stores/book/";
-import Add from "./Add.vue";
+import AddButton from "./AddButton.vue";
+
 export default {
   name: "book-list",
   components: {
-    Add
+    AddButton
   },
   setup() {
     const user = userStore();

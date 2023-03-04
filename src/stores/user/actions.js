@@ -3,6 +3,7 @@ import { Loading, Dialog } from 'quasar'
 import { getDoc, doc, setDoc } from "firebase/firestore";
 import { authStore } from '../auth/index.js'
 import { i18n } from '../../boot/i18n';
+const $t = i18n.global.t;
 
 export default {
   async fetchUser () {
@@ -40,8 +41,8 @@ export default {
       }
       if (displayName === auth.user.email.split('@')[0]) {
         Dialog.create({
-          title: i18n.global.t('auth.newUserWhatsYourDisplayName'),
-          message: i18n.global.t('auth.newUserWhatsYourDisplayNameMessage'),
+          title: $t('auth.newUserWhatsYourDisplayName'),
+          message: $t('auth.newUserWhatsYourDisplayNameMessage'),
           prompt: {
             model: '',
             type: 'text'

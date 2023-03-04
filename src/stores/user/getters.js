@@ -16,5 +16,8 @@ export default {
   },
   isOwner (state) {
     return state.user?.id === this.activeBook?.created_by
+  },
+  numberOfBooks (state) {
+    return state.user?.books?.length || 0
   }
 }

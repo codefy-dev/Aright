@@ -87,5 +87,8 @@ export default {
     deleteLineSuccess: 'Record deleted successfully',
     share: 'Share',
     memberAlreadyInUse: 'Name already in use',
+    maxBooksMessage: 'You have reached the maximum number of books',
+    membersIsRequired: 'The book must have at least one member',
+    maxMembersMessage: 'The maximum number of members is {max}',
   }
 }

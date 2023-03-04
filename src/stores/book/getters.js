@@ -1,5 +1,6 @@
 import { Screen } from 'quasar'
 import { i18n } from '../../boot/i18n';
+const $t = i18n.global.t;
 
 export default {
   balance (state) {
@@ -20,30 +21,36 @@ export default {
   membersBalance (state) {
     return state?.book[0]?.members_balance ?? {}
   },
+  dialogAdd (state) {
+    return state.dialog && state.dialogAction === 'add'
+  },
+  dialogEdit (state) {
+    return state.dialog && state.dialogAction === 'edit'
+  },
   availableGateways () {
     return [
       {
-        label: i18n.global.t('book.gateways.transfer'),
+        label: $t('book.gateways.transfer'),
         value: 'transfer',
         icon: 'devices'
       },
       {
-        label: i18n.global.t('book.gateways.cash'),
+        label: $t('book.gateways.cash'),
         value: 'cash',
         icon: 'payments'
       },
       {
-        label: i18n.global.t('book.gateways.creditCard'),
+        label: $t('book.gateways.creditCard'),
         value: 'credit_card',
         icon: 'credit_card'
       },
       {
-        label: i18n.global.t('book.gateways.debitCard'),
+        label: $t('book.gateways.debitCard'),
         value: 'debit_card',
         icon: 'credit_card'
       },
       {
-        label: i18n.global.t('book.gateways.other'),
+        label: $t('book.gateways.other'),
         value: 'other',
         icon: 'credit_card'
       },

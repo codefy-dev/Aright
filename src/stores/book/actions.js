@@ -3,6 +3,7 @@ import { Loading, date, Screen, Notify, Dialog } from 'quasar'
 import { collection, query, getDocs, orderBy, addDoc, limit, startAfter, setDoc, doc, Timestamp } from "firebase/firestore";
 import { userStore } from '../user/index.js'
 import { i18n } from '../../boot/i18n';
+const $t = i18n.global.t;
 
 export default {
   async fetchPage () {
@@ -58,15 +59,17 @@ export default {
       status: 'active',
       ...book,
     }
+    Loading.show()
     let booksCollection = collection(firebaseDb, 'books')
     let bookReff = await addDoc(booksCollection, newBook)
     await this.setActiveBook({ ...newBook, id: bookReff.id }, false)
     Notify.create({
-      message: i18n.global.t('book.addBookSuccess'),
+      message: $t('book.addBookSuccess'),
       color: 'positive',
       icon: 'check_circle'
     })
-
+    this.dialogHide()
+    Loading.hide()
   },
   async nextPage () {
     this.pagination.page++
@@ -132,8 +135,8 @@ export default {
     let user = await storedUser.userInfo
     if (line.created_by === user.id && line.id === this.book[0].id) {
       Dialog.create({
-        title: i18n.global.t('book.deleteLine'),
-        message: i18n.global.t('book.deleteLineMessage'),
+        title: $t('book.deleteLine'),
+        message: $t('book.deleteLineMessage'),
         cancel: true,
         persistent: true
       }).onOk(async () => {
@@ -152,14 +155,14 @@ export default {
     let user = await storedUser.userInfo
     if (book.created_by === user.id) {
       Dialog.create({
-        title: i18n.global.t('book.deleteBook'),
-        message: i18n.global.t('book.deleteBookMessage', { bookName: book.name }),
+        title: $t('book.deleteBook'),
+        message: $t('book.deleteBookMessage', { bookName: book.name }),
         cancel: {
           flat: true,
           color: 'primary'
         },
         ok: {
-          label: i18n.global.t('delete'),
+          label: $t('delete'),
           color: 'negative',
           icon: 'delete',
         },
@@ -173,7 +176,7 @@ export default {
           deleted_at: Timestamp.now()
         }
         await this.editBook(deletedBook, {
-          message: i18n.global.t('book.deleteBookSuccess'),
+          message: $t('book.deleteBookSuccess'),
           color: 'positive',
           icon: 'delete'
         })
@@ -188,6 +191,7 @@ export default {
         })
         storedUser.user.books = newBooks
         await storedUser.updateUser()
+        this.dialogHide()
         Loading.hide()
       })
     }
@@ -198,21 +202,71 @@ export default {
     return user.books[bookId]
   },
   async editBook (book, succeesMessage = {
-    message: i18n.global.t('book.editBookSuccess'),
+    message: $t('book.editBookSuccess'),
     color: 'positive',
     icon: 'check_circle'
   }) {
+    Loading.show()
     const storedUser = userStore()
     let user = await storedUser.userInfo
     if (book.created_by === user.id) {
-      Loading.show()
       let bookCollection = collection(firebaseDb, 'books')
       await setDoc(doc(bookCollection, book.id), book)
       storedUser.user.books[book.id] = book
       await storedUser.updateUser()
+      this.dialogHide()
       Loading.hide()
       Notify.create(succeesMessage)
     }
+  },
+  dialogShow (action) {
+    this.dialog = true
+    this.dialogAction = action === 'add' ? 'add' : 'edit'
+  },
+  dialogHide () {
+    this.dialog = false
+  },
+  async bookValidation (book) {
+    const storedUser = userStore()
+    let user = await storedUser.userInfo
+
+    if (user.numberOfBooks >= this.maxBooks) {
+      Notify.create({
+        title: $t("error"),
+        message: $t("book.maxBooksMessage", {
+          max: this.maxBooks
+        }),
+        color: "negative"
+      });
+      return false;
+    }
+    if (book.members.length < 0) {
+      Notify.create({
+        title: $t("error"),
+        message: $t("book.membersIsRequired"),
+        color: "negative"
+      });
+      return false;
+    }
+    if (book.members.length > this.maxMembers) {
+      Notify.create({
+        title: $t("error"),
+        message: $t("book.maxMembersMessage", {
+          max: this.maxMembers
+        }),
+        color: "negative"
+      });
+      return false;
+    }
+    if (book.name.length < 2) {
+      Notify.create({
+        title: $t("error"),
+        message: $t("book.nameIsRequired"),
+        color: "negative"
+      });
+      return false;
+    }
+    return true;
   }
 
 }

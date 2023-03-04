@@ -20,7 +20,7 @@
 <script>
 import { ref } from "vue";
 import { bookStore } from "src/stores/book";
-import Books from "src/components/Book/Books.vue";
+import Books from "src/components/Book/List.vue";
 import { userStore } from "src/stores/user";
 
 export default {

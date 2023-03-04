@@ -11,7 +11,7 @@
           {{ edit ? $t("book.editBook") : $t("book.newBook") }}
         </div>
         <q-space />
-        <q-btn icon="close" flat round dense v-close-popup />
+        <q-btn icon="close" flat round dense @click="storeBook.dialogHide" />
       </q-card-section>
       <q-separator color="primary" inset />
       <q-card-section class="row items-center">
@@ -41,8 +41,12 @@
               { icon: 'star', value: 'star' },
               { icon: 'shopping_cart', value: 'shopping_cart' },
               { icon: 'savings', value: 'savings' },
-              { icon: 'account_balance', value: 'account_balance' },
-              { icon: 'favorite', value: 'favorite' }
+              { icon: 'favorite', value: 'favorite' },
+              { icon: 'book', value: 'book' },
+              {
+                icon: 'account_balance_wallet',
+                value: 'account_balance_wallet'
+              }
             ]"
           />
         </q-item-section>
@@ -146,12 +150,11 @@
         </q-item>
       </q-card-section>
       <q-separator color="primary" inset />
-      <q-card-actions align="around">
+      <q-card-actions :align="edit ? 'around' : 'right'">
         <q-btn
           flat
           :label="$t('delete')"
           color="negative"
-          v-close-popup="-1"
           icon="delete"
           @click="storeBook.deleteBook(book)"
           v-if="edit"
@@ -159,9 +162,8 @@
         <q-btn
           :label="edit ? $t('save') : $t('add')"
           color="primary"
-          @click="summitAction(book)"
+          @click="send"
           :icon="edit ? 'save' : 'add'"
-          v-close-popup="-1"
         />
       </q-card-actions>
     </q-form>
@@ -180,10 +182,6 @@ export default {
     bookId: {
       type: String,
       default: null
-    },
-    summitAction: {
-      type: Function,
-      default: () => {}
     }
   },
   setup() {
@@ -204,20 +202,45 @@ export default {
     });
     const edit = ref(false);
     const newMember = ref("");
-    const quasar = useQuasar();
     const newMemberInput = ref(null);
     const isReady = ref(false);
 
-    const addMember = () => {
-      if (newMember.value.length < 3) {
+    return {
+      book,
+      edit,
+      storeBook,
+      newMember,
+      user,
+      isReady,
+      newMemberInput
+    };
+  },
+  methods: {
+    async send() {
+      if (await this.storeBook.bookValidation(this.book)) {
+        if (this.edit) {
+          await this.storeBook.editBook(this.book);
+        } else {
+          await this.storeBook.addBook(this.book);
+        }
+      }
+    },
+    deleteMember(member) {
+      this.book.membersInfo = this.book.membersInfo.filter(
+        (m) => m.id !== member.id
+      );
+      this.book.members = this.book.members.filter((m) => m !== member.id);
+    },
+    addMember() {
+      if (this.newMember.length < 3) {
         return;
       }
       if (
-        book.value.membersInfo.find(
-          (m) => m.displayName.toLowerCase() === newMember.value.toLowerCase()
+        this.book.membersInfo.find(
+          (m) => m.displayName.toLowerCase() === this.newMember.toLowerCase()
         )
       ) {
-        quasar.notify({
+        this.$q.notify({
           title: this.$t("error"),
           message: this.$t("book.memberAlreadyInUse"),
           color: "negative"
@@ -225,44 +248,34 @@ export default {
         return;
       }
 
-      book.value.membersInfo.push({
+      this.book.membersInfo.push({
         id: uid(),
-        displayName: newMember.value,
+        displayName: this.newMember,
         owner: false
       });
-      book.value.members.push(uid());
-      newMember.value = "";
-      newMemberInput.value.resetValidation();
-    };
-
-    const toggleMemberList = (value) => {
-      if (value && !book.value.membersInfo) {
-        book.value["membersInfo"] = [
+      this.book.members.push(uid());
+      this.newMember = "";
+      this.newMemberInput.resetValidation();
+    },
+    toggleMemberList(value) {
+      if (value && !this.book.membersInfo) {
+        this.book.membersInfo = [
           {
-            id: user.user.id,
-            displayName: user.user.displayName,
+            id: this.user.user.id,
+            displayName: this.user.user.displayName,
             owner: true
           }
         ];
-        book.value.members = [user.user.id];
+        this.book.members = [this.user.user.id];
       }
-    };
-
-    return {
-      book,
-      edit,
-      storeBook,
-      newMember,
-      addMember,
-      user,
-      toggleMemberList,
-      isReady
-    };
+    }
   },
   async mounted() {
     if (this.bookId) {
       this.book = { ...(await this.storeBook.getBook(this.bookId)) };
       this.edit = this.book?.id ? true : false;
+      this.isReady = true;
+    } else {
       this.isReady = true;
     }
   }
