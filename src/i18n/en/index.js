@@ -42,6 +42,7 @@ export default {
     settings: 'Settings',
     darkMode: 'Dark Mode',
     logout: 'Logout',
+    problemTryingToSignUp: 'There was a problem trying to sign up',
   },
   book: {
     title: 'Title',

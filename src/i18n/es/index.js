@@ -40,6 +40,7 @@ export default {
     settings: 'Configuración',
     darkMode: 'Modo oscuro',
     logout: 'Cerrar sesión',
+    problemTryingToSignUp: 'Hubo un problema intentando registrarse',
   },
   book: {
     title: 'Título',
