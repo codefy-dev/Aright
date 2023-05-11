@@ -1,13 +1,16 @@
 import {
   firebaseAuth,
-  firebaseSignIn,
+  firebaseSignInEmailPassword,
   firebaseOnAuthStateChanged,
   firebaseSignOut,
   firebaseUpdateProfile,
   firebaseUpdatePassword,
   firebaseReauthenticate,
   firebaseEmailAuthProvider,
-  firebaseStorage
+  firebaseStorage,
+  firebaseActionCodeSettings,
+  firebaseSignInLink,
+  // firebaseSignInGoogle
 } from '../../boot/firebase';
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { Notify, Dark } from 'quasar'
@@ -17,15 +20,66 @@ import md5 from 'md5'
 
 const $t = i18n.global.t;
 
-
 export default {
   login (payload) {
     this.user.loading = true
-    firebaseSignIn(firebaseAuth, payload.email, payload.password).then(response => {
+    switch (payload.type) {
+      case 'google':
+        this.loginGoogle()
+        break;
+      case 'apple':
+        this.loginApple()
+        break;
+      case 'emailPassword':
+        this.loginEmailPassword(payload)
+        break;
+      case 'link':
+        this.loginLink(payload)
+        break;
+      default:
+        this.user.loading = false
+        break;
+    }
+    this.user.loading = false
+  },
+  loginGoogle () {
+    // firebaseSignInGoogle(firebaseAuth).then(response => {
+    //   this.user = response.user
+    // }).catch((error) => {
+    //   const errorCode = error.code;
+    //   console.error(error)
+    //   Notify.create({
+    //     message: $t('auth.problemTryingToLogin') + ' | ' + errorCode,
+    //     type: 'negative'
+    //   })
+    // });
+  },
+  loginApple () {
+    Notify.create({
+      message: $t('auth.appleNotImplemented'),
+      type: 'negative'
+    })
+  },
+  loginEmailPassword (payload) {
+    firebaseSignInEmailPassword(firebaseAuth, payload.email, payload.password).then(response => {
       this.user = response.user
-      this.user.loading = false
     }).catch((error) => {
-      this.user.loading = false
+      const errorCode = error.code;
+      console.error(error)
+      Notify.create({
+        message: $t('auth.problemTryingToLogin') + ' | ' + errorCode,
+        type: 'negative'
+      })
+    });
+  },
+  loginLink (payload) {
+    firebaseSignInLink(firebaseAuth, payload.email, firebaseActionCodeSettings).then(() => {
+      Notify.create({
+        message: $t('auth.checkYourEmail'),
+        type: 'positive',
+        timeout: 20000
+      })
+    }).catch((error) => {
       const errorCode = error.code;
       console.error(error)
       Notify.create({

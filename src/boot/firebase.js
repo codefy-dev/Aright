@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import {
   getAuth,
-  createUserWithEmailAndPassword,
+  sendSignInLinkToEmail,
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
@@ -25,9 +25,27 @@ var firebaseConfig = {
   measurementId: process.env.FIREBASE_MEASUREMENT_ID
 };
 
+const firebaseActionCodeSettings = {
+  // URL you want to redirect back to. The domain (www.example.com) for this
+  // URL must be in the authorized domains list in the Firebase Console.
+  url: process.env.APP_URL,
+  handleCodeInApp: true,
+  iOS: {
+    bundleId: process.env.IOS_BUNDLE_ID
+  },
+  android: {
+    packageName: process.env.ANDROID_PACKAGE_NAME,
+    installApp: true,
+    minimumVersion: '12'
+  },
+  dynamicLinkDomain: process.env.FIREBASE_DINAMIC_LINKS_DOMAIN
+};
+
+
 const firebaseApp = initializeApp(firebaseConfig)
 const firebaseAuth = getAuth(firebaseApp)
-const firebaseSignIn = signInWithEmailAndPassword
+const firebaseSignInEmailPassword = signInWithEmailAndPassword
+const firebaseSignInLink = sendSignInLinkToEmail
 const firebaseOnAuthStateChanged = onAuthStateChanged
 const firebaseSignOut = signOut
 const firebaseDb = getFirestore(firebaseApp)
@@ -39,7 +57,8 @@ const firebaseStorage = getStorage(firebaseApp);
 
 export {
   firebaseAuth,
-  firebaseSignIn,
+  firebaseSignInEmailPassword,
+  firebaseSignInLink,
   firebaseOnAuthStateChanged,
   firebaseApp,
   firebaseSignOut,
@@ -48,5 +67,6 @@ export {
   firebaseUpdatePassword,
   firebaseReauthenticate,
   firebaseEmailAuthProvider,
-  firebaseStorage
+  firebaseStorage,
+  firebaseActionCodeSettings
 }

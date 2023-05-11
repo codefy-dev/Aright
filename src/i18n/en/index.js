@@ -6,6 +6,7 @@ export default {
   error: 'Error',
   delete: 'Delete',
   add: 'Add',
+  send: 'Send',
   auth: {
     loginTitle: 'Login',
     login: 'Login',
@@ -43,6 +44,11 @@ export default {
     darkMode: 'Dark Mode',
     logout: 'Logout',
     problemTryingToSignUp: 'There was a problem trying to sign up',
+    emailLinkLogin: 'Email Link',
+    emailLinkLoginMessage: 'Login with magic link',
+    checkYourEmail: 'Check your email for the magic link',
+    googleLogin: 'Google',
+    appleLogin: 'Apple'
   },
   book: {
     title: 'Title',

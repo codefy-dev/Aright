@@ -6,6 +6,7 @@ export default {
   error: 'Error',
   add: 'Agregar',
   delete: 'Eliminar',
+  send: 'Enviar',
   auth: {
     loginTitle: 'Inicio de sesión',
     login: 'Iniciar sesión',
@@ -41,6 +42,11 @@ export default {
     darkMode: 'Modo oscuro',
     logout: 'Cerrar sesión',
     problemTryingToSignUp: 'Hubo un problema intentando registrarse',
+    emailLinkLogin: 'Enlace de email',
+    emailLinkLoginMessage: 'Iniciar sesión con enlace mágico',
+    checkYourEmail: 'Revisa tu correo electrónico para el enlace mágico',
+    googleLogin: 'Google',
+    appleLogin: 'Apple',
   },
   book: {
     title: 'Título',
