@@ -8,7 +8,9 @@ import {
   updateProfile,
   updatePassword,
   reauthenticateWithCredential,
-  EmailAuthProvider
+  EmailAuthProvider,
+  isSignInWithEmailLink,
+  signInWithEmailLink
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -28,7 +30,7 @@ var firebaseConfig = {
 const firebaseActionCodeSettings = {
   // URL you want to redirect back to. The domain (www.example.com) for this
   // URL must be in the authorized domains list in the Firebase Console.
-  url: process.env.APP_URL,
+  url: process.env.FIREBASE_DINAMIC_LINKS_URL,
   handleCodeInApp: true,
   iOS: {
     bundleId: process.env.IOS_BUNDLE_ID
@@ -45,7 +47,7 @@ const firebaseActionCodeSettings = {
 const firebaseApp = initializeApp(firebaseConfig)
 const firebaseAuth = getAuth(firebaseApp)
 const firebaseSignInEmailPassword = signInWithEmailAndPassword
-const firebaseSignInLink = sendSignInLinkToEmail
+const firebaseSendSignInLink = sendSignInLinkToEmail
 const firebaseOnAuthStateChanged = onAuthStateChanged
 const firebaseSignOut = signOut
 const firebaseDb = getFirestore(firebaseApp)
@@ -54,11 +56,13 @@ const firebaseUpdatePassword = updatePassword
 const firebaseReauthenticate = reauthenticateWithCredential
 const firebaseEmailAuthProvider = EmailAuthProvider
 const firebaseStorage = getStorage(firebaseApp);
+const firebaseIsSignInWithLink = isSignInWithEmailLink
+const firebaseSignInWithLink = signInWithEmailLink
 
 export {
   firebaseAuth,
   firebaseSignInEmailPassword,
-  firebaseSignInLink,
+  firebaseSendSignInLink,
   firebaseOnAuthStateChanged,
   firebaseApp,
   firebaseSignOut,
@@ -68,5 +72,7 @@ export {
   firebaseReauthenticate,
   firebaseEmailAuthProvider,
   firebaseStorage,
-  firebaseActionCodeSettings
+  firebaseActionCodeSettings,
+  firebaseIsSignInWithLink,
+  firebaseSignInWithLink
 }

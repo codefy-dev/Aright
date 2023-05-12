@@ -125,7 +125,7 @@ export default {
   setup() {
     const auth = authStore();
     const formData = ref({
-      email: "miha@aright.app",
+      email: "",
       password: "",
       type: "emailPassword"
     });
@@ -141,27 +141,30 @@ export default {
     };
   },
   methods: {
-    submitForm() {
-      this.auth.login(this.formData);
+    async submitForm() {
+      await this.auth.login(this.formData);
     },
     isValidEmail(val) {
       const emailPattern =
         /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
       return emailPattern.test(val) || this.$t("auth.emailIsInvalid");
     },
-    sendEmailLink() {
+    async sendEmailLink() {
       this.emailLinkInputRef.validate();
       if (this.emailLinkInputRef.hasError) {
         return;
       }
       this.formData.type = "link";
-      this.auth.login(this.formData);
+      await this.auth.login(this.formData);
     }
   },
   computed: {
     show() {
       return !this.auth.user?.uid;
     }
+  },
+  mounted() {
+    this.auth.checkLinkLogin();
   }
 };
 </script>

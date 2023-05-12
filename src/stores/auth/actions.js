@@ -9,7 +9,9 @@ import {
   firebaseEmailAuthProvider,
   firebaseStorage,
   firebaseActionCodeSettings,
-  firebaseSignInLink,
+  firebaseSendSignInLink,
+  firebaseIsSignInWithLink,
+  firebaseSignInWithLink,
   // firebaseSignInGoogle
 } from '../../boot/firebase';
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
@@ -21,20 +23,20 @@ import md5 from 'md5'
 const $t = i18n.global.t;
 
 export default {
-  login (payload) {
+  async login (payload) {
     this.user.loading = true
     switch (payload.type) {
       case 'google':
-        this.loginGoogle()
+        await this.loginGoogle()
         break;
       case 'apple':
-        this.loginApple()
+        await this.loginApple()
         break;
       case 'emailPassword':
-        this.loginEmailPassword(payload)
+        await this.loginEmailPassword(payload)
         break;
       case 'link':
-        this.loginLink(payload)
+        await this.sendSignInLink(payload)
         break;
       default:
         this.user.loading = false
@@ -42,7 +44,7 @@ export default {
     }
     this.user.loading = false
   },
-  loginGoogle () {
+  async loginGoogle () {
     // firebaseSignInGoogle(firebaseAuth).then(response => {
     //   this.user = response.user
     // }).catch((error) => {
@@ -54,14 +56,14 @@ export default {
     //   })
     // });
   },
-  loginApple () {
+  async loginApple () {
     Notify.create({
       message: $t('auth.appleNotImplemented'),
       type: 'negative'
     })
   },
-  loginEmailPassword (payload) {
-    firebaseSignInEmailPassword(firebaseAuth, payload.email, payload.password).then(response => {
+  async loginEmailPassword (payload) {
+    await firebaseSignInEmailPassword(firebaseAuth, payload.email, payload.password).then(response => {
       this.user = response.user
     }).catch((error) => {
       const errorCode = error.code;
@@ -72,8 +74,9 @@ export default {
       })
     });
   },
-  loginLink (payload) {
-    firebaseSignInLink(firebaseAuth, payload.email, firebaseActionCodeSettings).then(() => {
+  async sendSignInLink (payload) {
+    await firebaseSendSignInLink(firebaseAuth, payload.email, firebaseActionCodeSettings).then(() => {
+      window.localStorage.setItem('emailForSignIn', payload.email);
       Notify.create({
         message: $t('auth.checkYourEmail'),
         type: 'positive',
@@ -87,6 +90,30 @@ export default {
         type: 'negative'
       })
     });
+  },
+  async checkLinkLogin () {
+    let email = window.localStorage.getItem('emailForSignIn');
+    if (!email) {
+      return
+    }
+    if (firebaseIsSignInWithLink(firebaseAuth, window.location.href)) {
+      await firebaseSignInWithLink(firebaseAuth, email, window.location.href).then((result) => {
+        window.localStorage.removeItem('emailForSignIn');
+        this.user = result.user
+        // You can access the new user via result.user
+        // Additional user info profile not available via:
+        // result.additionalUserInfo.profile == null
+        // You can check if the user is new or existing:
+        // result.additionalUserInfo.isNewUser
+      }).catch((error) => {
+        const errorCode = error.code;
+        console.error(error)
+        Notify.create({
+          message: $t('auth.problemTryingToLogin') + ' | ' + errorCode,
+          type: 'negative'
+        })
+      });
+    }
   },
   logout () {
     firebaseSignOut(firebaseAuth).then(() => {
