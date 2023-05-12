@@ -33,43 +33,6 @@
           icon="fa-brands fa-apple"
           align="between"
         />
-        <q-separator class="q-mb-md" />
-        <q-form @submit="submitForm" autocomplete="off">
-          <q-input
-            v-model="formData.email"
-            class="q-mb-md"
-            outlined
-            type="email"
-            :label="$t('auth.email')"
-            :rules="[
-              (val) => !!val || $t('auth.emailIsRequired'),
-              isValidEmail
-            ]"
-            lazy-rules
-          />
-          <q-input
-            v-model="formData.password"
-            outlined
-            :type="isPwd ? 'password' : 'text'"
-            :label="$t('auth.password')"
-            ref="password"
-            :rules="[(val) => !!val || $t('auth.passwordIsRequired')]"
-            lazy-rules
-            @keyup.enter="submitForm"
-          >
-            <template v-slot:append>
-              <q-icon
-                :name="isPwd ? 'visibility_off' : 'visibility'"
-                class="cursor-pointer"
-                @click="isPwd = !isPwd"
-              />
-            </template>
-          </q-input>
-          <div class="row">
-            <q-space />
-            <q-btn color="primary" type="submit" :label="$t('auth.login')" />
-          </div>
-        </q-form>
       </q-card-section>
       <q-dialog v-model="emailLinkPrompt" persistent>
         <q-card style="min-width: 350px">
@@ -126,24 +89,18 @@ export default {
     const auth = authStore();
     const formData = ref({
       email: "",
-      password: "",
-      type: "emailPassword"
+      type: "link"
     });
-    const isPwd = ref(true);
     const emailLinkPrompt = ref(false);
     const emailLinkInputRef = ref(null);
     return {
       formData,
       auth,
-      isPwd,
       emailLinkPrompt,
       emailLinkInputRef
     };
   },
   methods: {
-    async submitForm() {
-      await this.auth.login(this.formData);
-    },
     isValidEmail(val) {
       const emailPattern =
         /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
@@ -154,7 +111,6 @@ export default {
       if (this.emailLinkInputRef.hasError) {
         return;
       }
-      this.formData.type = "link";
       await this.auth.login(this.formData);
     }
   },

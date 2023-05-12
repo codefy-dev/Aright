@@ -1,23 +1,17 @@
 import {
   firebaseAuth,
-  firebaseSignInEmailPassword,
   firebaseOnAuthStateChanged,
   firebaseSignOut,
   firebaseUpdateProfile,
-  firebaseUpdatePassword,
-  firebaseReauthenticate,
-  firebaseEmailAuthProvider,
   firebaseStorage,
   firebaseActionCodeSettings,
   firebaseSendSignInLink,
   firebaseIsSignInWithLink,
-  firebaseSignInWithLink,
-  // firebaseSignInGoogle
+  firebaseSignInWithLink
 } from '../../boot/firebase';
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { Notify, Dark } from 'quasar'
 import { i18n } from '../../boot/i18n';
-import zxcvbn from 'zxcvbn'
 import md5 from 'md5'
 
 const $t = i18n.global.t;
@@ -32,9 +26,6 @@ export default {
       case 'apple':
         await this.loginApple()
         break;
-      case 'emailPassword':
-        await this.loginEmailPassword(payload)
-        break;
       case 'link':
         await this.sendSignInLink(payload)
         break;
@@ -45,34 +36,8 @@ export default {
     this.user.loading = false
   },
   async loginGoogle () {
-    // firebaseSignInGoogle(firebaseAuth).then(response => {
-    //   this.user = response.user
-    // }).catch((error) => {
-    //   const errorCode = error.code;
-    //   console.error(error)
-    //   Notify.create({
-    //     message: $t('auth.problemTryingToLogin') + ' | ' + errorCode,
-    //     type: 'negative'
-    //   })
-    // });
   },
   async loginApple () {
-    Notify.create({
-      message: $t('auth.appleNotImplemented'),
-      type: 'negative'
-    })
-  },
-  async loginEmailPassword (payload) {
-    await firebaseSignInEmailPassword(firebaseAuth, payload.email, payload.password).then(response => {
-      this.user = response.user
-    }).catch((error) => {
-      const errorCode = error.code;
-      console.error(error)
-      Notify.create({
-        message: $t('auth.problemTryingToLogin') + ' | ' + errorCode,
-        type: 'negative'
-      })
-    });
   },
   async sendSignInLink (payload) {
     await firebaseSendSignInLink(firebaseAuth, payload.email, firebaseActionCodeSettings).then(() => {
@@ -137,14 +102,6 @@ export default {
         message: $t('auth.profileUpdated'),
         type: 'positive'
       })
-      if (payload.passwords) {
-        this.updatePassword(payload.passwords).catch(error => {
-          Notify.create({
-            message: $t('auth.problemChangingPassword') + ' | ' + error.code,
-            type: 'negative'
-          })
-        })
-      }
     }).catch((error) => {
       this.user.loading = false
       console.error(error)
@@ -153,60 +110,6 @@ export default {
         type: 'negative'
       })
     })
-  },
-  updatePassword (passwords) {
-    return new Promise((resolve, reject) => {
-      this.reauthenticate(passwords.current).then(() => {
-        this.user.loading = true
-        if (this.passwordStrength(passwords.new).score < 2) {
-          reject({
-            message: $t('auth.passwordWeak'),
-            code: $t('auth.passwordWeak')
-          })
-        }
-        firebaseUpdatePassword(firebaseAuth.currentUser, passwords.new).then(() => {
-          this.user.loading = false
-          Notify.create({
-            message: $t('auth.passwordUpdated'),
-            type: 'positive'
-          })
-          resolve()
-        }).catch((error) => {
-          this.user.loading = false
-          reject(error)
-        })
-      }).catch((error) => {
-        this.user.loading = false
-        reject(error)
-      })
-    })
-  },
-  reauthenticate (password) {
-    return new Promise((resolve, reject) => {
-      const credential = firebaseEmailAuthProvider.credential(this.user.email, password)
-      firebaseReauthenticate(firebaseAuth.currentUser, credential).then(() => {
-        resolve()
-      }).catch((error) => {
-        reject(error)
-      })
-    })
-  },
-  passwordStrength (password) {
-    let score = zxcvbn(password || '').score
-    return {
-      score,
-      color: ['red', 'red', 'deep-orange', 'orange', 'green'][score],
-      text: $t('auth.passwordStrength', { score }),
-      values: Array(5).fill().map((_, idx) => {
-        if (score == 0 || score < idx - 1) {
-          return 0
-        }
-        if (score >= idx) {
-          return 1
-        }
-        return 0.1
-      })
-    }
   },
   uploadAvatar (avatar) {
     return new Promise((resolve, reject) => {

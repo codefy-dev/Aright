@@ -2,13 +2,9 @@ import { initializeApp } from 'firebase/app';
 import {
   getAuth,
   sendSignInLinkToEmail,
-  signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
   updateProfile,
-  updatePassword,
-  reauthenticateWithCredential,
-  EmailAuthProvider,
   isSignInWithEmailLink,
   signInWithEmailLink
 } from "firebase/auth";
@@ -46,31 +42,23 @@ const firebaseActionCodeSettings = {
 
 const firebaseApp = initializeApp(firebaseConfig)
 const firebaseAuth = getAuth(firebaseApp)
-const firebaseSignInEmailPassword = signInWithEmailAndPassword
 const firebaseSendSignInLink = sendSignInLinkToEmail
 const firebaseOnAuthStateChanged = onAuthStateChanged
 const firebaseSignOut = signOut
 const firebaseDb = getFirestore(firebaseApp)
 const firebaseUpdateProfile = updateProfile
-const firebaseUpdatePassword = updatePassword
-const firebaseReauthenticate = reauthenticateWithCredential
-const firebaseEmailAuthProvider = EmailAuthProvider
 const firebaseStorage = getStorage(firebaseApp);
 const firebaseIsSignInWithLink = isSignInWithEmailLink
 const firebaseSignInWithLink = signInWithEmailLink
 
 export {
   firebaseAuth,
-  firebaseSignInEmailPassword,
   firebaseSendSignInLink,
   firebaseOnAuthStateChanged,
   firebaseApp,
   firebaseSignOut,
   firebaseDb,
   firebaseUpdateProfile,
-  firebaseUpdatePassword,
-  firebaseReauthenticate,
-  firebaseEmailAuthProvider,
   firebaseStorage,
   firebaseActionCodeSettings,
   firebaseIsSignInWithLink,
