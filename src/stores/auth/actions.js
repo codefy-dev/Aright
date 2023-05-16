@@ -7,7 +7,11 @@ import {
   firebaseActionCodeSettings,
   firebaseSendSignInLink,
   firebaseIsSignInWithLink,
-  firebaseSignInWithLink
+  firebaseSignInWithLink,
+  firebaseGoogleAuthProvider,
+  firebaseSignInWithPopup,
+  firebaseAppleOAuthProvider,
+  firebaseFacebookAuthProvider
 } from '../../boot/firebase';
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { Notify, Dark } from 'quasar'
@@ -21,11 +25,13 @@ export default {
     this.user.loading = true
     switch (payload.type) {
       case 'google':
-        await this.loginGoogle()
+        await this.signInWithPopup(firebaseGoogleAuthProvider)
         break;
       case 'apple':
-        await this.loginApple()
+        await this.signInWithPopup(firebaseAppleOAuthProvider)
         break;
+      case 'facebook':
+        await this.signInWithPopup(firebaseFacebookAuthProvider)
       case 'link':
         await this.sendSignInLink(payload)
         break;
@@ -35,9 +41,29 @@ export default {
     }
     this.user.loading = false
   },
-  async loginGoogle () {
-  },
-  async loginApple () {
+  async signInWithPopup (provider) {
+    await firebaseSignInWithPopup(firebaseAuth, provider).then((result) => {
+      this.user = result.user
+      // Apple credential
+      // const credential = OAuthProvider.credentialFromResult(result);
+      // const accessToken = credential.accessToken;
+      // const idToken = credential.idToken;
+
+      // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+      // const credential = FacebookAuthProvider.credentialFromResult(result);
+      // const accessToken = credential.accessToken;
+
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      // const credential = GoogleAuthProvider.credentialFromResult(result);
+      // const token = credential.accessToken;
+    }).catch((error) => {
+      const errorCode = error.code;
+      console.error(error)
+      Notify.create({
+        message: $t('auth.problemTryingToLogin') + ' | ' + errorCode,
+        type: 'negative'
+      })
+    });
   },
   async sendSignInLink (payload) {
     await firebaseSendSignInLink(firebaseAuth, payload.email, firebaseActionCodeSettings).then(() => {

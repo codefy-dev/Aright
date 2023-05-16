@@ -31,6 +31,7 @@ export default {
     checkYourEmail: 'Revisa tu correo electrónico para el enlace mágico',
     googleLogin: 'Google',
     appleLogin: 'Apple',
+    facebookLogin: 'Facebook',
   },
   book: {
     title: 'Título',

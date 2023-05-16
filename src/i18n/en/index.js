@@ -30,7 +30,8 @@ export default {
     emailLinkLoginMessage: 'Login with magic link',
     checkYourEmail: 'Check your email for the magic link',
     googleLogin: 'Google',
-    appleLogin: 'Apple'
+    appleLogin: 'Apple',
+    facebookLogin: 'Facebook',
   },
   book: {
     title: 'Title',

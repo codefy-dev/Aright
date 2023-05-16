@@ -6,7 +6,11 @@ import {
   signOut,
   updateProfile,
   isSignInWithEmailLink,
-  signInWithEmailLink
+  signInWithEmailLink,
+  GoogleAuthProvider,
+  signInWithPopup,
+  OAuthProvider,
+  FacebookAuthProvider
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -42,6 +46,7 @@ const firebaseActionCodeSettings = {
 
 const firebaseApp = initializeApp(firebaseConfig)
 const firebaseAuth = getAuth(firebaseApp)
+firebaseAuth.useDeviceLanguage();
 const firebaseSendSignInLink = sendSignInLinkToEmail
 const firebaseOnAuthStateChanged = onAuthStateChanged
 const firebaseSignOut = signOut
@@ -50,6 +55,10 @@ const firebaseUpdateProfile = updateProfile
 const firebaseStorage = getStorage(firebaseApp);
 const firebaseIsSignInWithLink = isSignInWithEmailLink
 const firebaseSignInWithLink = signInWithEmailLink
+const firebaseGoogleAuthProvider = new GoogleAuthProvider();
+const firebaseSignInWithPopup = signInWithPopup
+const firebaseAppleOAuthProvider = new OAuthProvider('apple.com');
+const firebaseFacebookAuthProvider = new FacebookAuthProvider();
 
 export {
   firebaseAuth,
@@ -62,5 +71,9 @@ export {
   firebaseStorage,
   firebaseActionCodeSettings,
   firebaseIsSignInWithLink,
-  firebaseSignInWithLink
+  firebaseSignInWithLink,
+  firebaseGoogleAuthProvider,
+  firebaseSignInWithPopup,
+  firebaseAppleOAuthProvider,
+  firebaseFacebookAuthProvider
 }

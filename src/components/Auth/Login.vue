@@ -25,6 +25,16 @@
           icon="fa-brands fa-google"
           text-color="black"
           align="between"
+          @click="auth.login({ type: 'google' })"
+        />
+        <q-btn
+          color="white"
+          class="full-width q-mt-sm"
+          :label="$t('auth.facebookLogin')"
+          icon="fa-brands fa-facebook"
+          text-color="blue-9"
+          align="between"
+          @click="auth.login({ type: 'facebook' })"
         />
         <q-btn
           color="grey-9"
@@ -32,6 +42,7 @@
           :label="$t('auth.appleLogin')"
           icon="fa-brands fa-apple"
           align="between"
+          @click="auth.login({ type: 'apple' })"
         />
       </q-card-section>
       <q-dialog v-model="emailLinkPrompt" persistent>
