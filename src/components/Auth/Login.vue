@@ -36,14 +36,14 @@
           align="between"
           @click="auth.login({ type: 'facebook' })"
         />
-        <q-btn
+        <!-- <q-btn
           color="grey-9"
           class="full-width q-mt-sm"
           :label="$t('auth.appleLogin')"
           icon="fa-brands fa-apple"
           align="between"
           @click="auth.login({ type: 'apple' })"
-        />
+        /> -->
       </q-card-section>
       <q-dialog v-model="emailLinkPrompt" persistent>
         <q-card style="min-width: 350px">

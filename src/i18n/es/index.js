@@ -32,6 +32,7 @@ export default {
     googleLogin: 'Google',
     appleLogin: 'Apple',
     facebookLogin: 'Facebook',
+    accountExistsWithDifferentCredential: 'Ya existe una cuenta con la misma dirección de correo electrónico pero con credenciales de inicio de sesión diferentes. Inicie sesión con un proveedor asociado a esta dirección de correo electrónico.',
   },
   book: {
     title: 'Título',

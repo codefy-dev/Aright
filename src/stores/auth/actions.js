@@ -59,9 +59,13 @@ export default {
     }).catch((error) => {
       const errorCode = error.code;
       console.error(error)
+      const message = errorCode === 'auth/account-exists-with-different-credential' ? $t('auth.accountExistsWithDifferentCredential') : $t('auth.problemTryingToLogin')
+      const type = errorCode === 'auth/account-exists-with-different-credential' ? 'warning' : 'negative'
+      const timeout = errorCode === 'auth/account-exists-with-different-credential' ? 20000 : 5000
       Notify.create({
-        message: $t('auth.problemTryingToLogin') + ' | ' + errorCode,
-        type: 'negative'
+        message,
+        type,
+        timeout
       })
     });
   },
