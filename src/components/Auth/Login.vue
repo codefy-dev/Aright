@@ -66,7 +66,7 @@
               dense
               v-model="formData.email"
               autofocus
-              @keyup.enter="prompt = false"
+              @keyup.enter="sendEmailLink()"
               :rules="[
                 (val) => !!val || $t('auth.emailIsRequired'),
                 isValidEmail

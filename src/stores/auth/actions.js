@@ -32,6 +32,7 @@ export default {
         break;
       case 'facebook':
         await this.signInWithPopup(firebaseFacebookAuthProvider)
+        break;
       case 'link':
         await this.sendSignInLink(payload)
         break;
