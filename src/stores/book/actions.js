@@ -9,6 +9,21 @@ export default {
   async fetchPage () {
     const storedUser = userStore()
     let user = await storedUser.userInfo
+    const bookId = this.router.currentRoute.value.params.bookId || null
+
+    if (user.activedBook && bookId === null) {
+      this.router.push({ name: 'Book', params: { bookId: user.activedBook } })
+    }
+
+    if (bookId && bookId !== user.activedBook) {
+      let bookRef = doc(firebaseDb, 'books', bookId)
+      let book = await getDocs(bookRef)
+      if (book.empty || !book.data().members.includes(user.id)) {
+        // ask user if he wants to join the book
+        return
+      }
+      return await this.setActiveBook(bookId, true)
+    }
     if (user.activedBook) {
       let booksRef = collection(firebaseDb, 'books', user.activedBook, 'lines')
       let q = this.pagination.page > 1 && this.pagination.pages[this.pagination.page] !== undefined ?
@@ -82,6 +97,7 @@ export default {
     const storedUser = userStore()
     let user = await storedUser.userInfo
     if (user.activedBook !== book.id) {
+      this.router.push({ name: 'Book', params: { bookId: book.id } })
       if (user.activedBook !== null && user.activedBook !== undefined) {
         storedUser.user.books[user.activedBook].active = false
       }

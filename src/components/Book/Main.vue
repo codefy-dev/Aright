@@ -30,7 +30,7 @@
       <q-separator />
       <q-tab-panels v-model="book.tab" animated swipeable infinite keep-alive>
         <q-tab-panel name="records">
-          <records />
+          <Records />
         </q-tab-panel>
         <q-tab-panel name="balances" v-if="user.activedBookIsMultiBalance">
           <Balance />

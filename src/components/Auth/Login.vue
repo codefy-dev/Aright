@@ -81,6 +81,10 @@
           <q-card-actions align="right" class="text-primary">
             <q-btn flat :label="$t('send')" @click="sendEmailLink()" />
           </q-card-actions>
+          <q-inner-loading
+            :showing="auth.user.loading"
+            transition-duration="1000"
+          ></q-inner-loading>
         </q-card>
       </q-dialog>
       <q-inner-loading
@@ -123,6 +127,7 @@ export default {
         return;
       }
       await this.auth.login(this.formData);
+      this.emailLinkPrompt = false;
     }
   },
   computed: {

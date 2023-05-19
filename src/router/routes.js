@@ -5,13 +5,21 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
-        path: '',
-        component: () => import('pages/Index.vue'),
+        path: 'book/:bookId?',
+        component: () => import('pages/Book.vue'),
+        name: 'Book',
+        meta: {
+          requiresAuth: true
+        },
+        alias: '' // alias until we have a default dashboard or something
       },
       {
-        path: '/auth',
+        path: 'auth',
         component: () => import('pages/Auth.vue'),
         name: 'Auth',
+        meta: {
+          requiresAuth: false
+        }
       }
     ]
   },
