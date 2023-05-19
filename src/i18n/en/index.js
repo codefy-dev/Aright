@@ -81,5 +81,6 @@ export default {
     maxBooksMessage: 'You have reached the maximum number of books',
     membersIsRequired: 'The book must have at least one member',
     maxMembersMessage: 'The maximum number of members is {max}',
+    linkToShare: 'Link to share',
   }
 }

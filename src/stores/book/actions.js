@@ -283,6 +283,41 @@ export default {
       return false;
     }
     return true;
+  },
+  async createDynamicLink () {
+    const storedUser = userStore()
+    let user = await storedUser.userInfo
+    const link = `${process.env.APP_URL}book/${user.activedBook}`
+    console.log('createDynamicLink link', link)
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "dynamicLinkInfo": {
+          "domainUriPrefix": process.env.FIREBASE_DINAMIC_LINKS_DOMAIN,
+          "link": link,
+          "androidInfo": {
+            "androidPackageName": process.env.ANDROID_PACKAGE_NAME
+          },
+          "iosInfo": {
+            "iosBundleId": process.env.IOS_BUNDLE_ID
+          }
+        }
+      })
+    }
+    fetch(`${process.env.FIREBASE_DINAMIC_LINKS_API}?key=${process.env.FIREBASE_API_KEY}`, requestOptions)
+      .then(async response => {
+        console.log('createDynamicLink response', response, requestOptions)
+        const data = await response.json();
+        if (!response.ok) {
+          const error = (data && data.message) || response.status;
+          return Promise.reject(error);
+        }
+        return data.shortLink;
+      }).catch(error => {
+        console.error('createDynamicLink error', error.code, error.message, error.status)
+      })
   }
-
 }

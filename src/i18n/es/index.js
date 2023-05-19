@@ -82,5 +82,6 @@ export default {
     maxBooksMessage: 'Has alcanzado el máximo de libros permitidos',
     membersIsRequired: 'El libro debe tener al menos un miembro',
     maxMembersMessage: 'El máximo de miembros permitidos es {max}',
+    linkToShare: 'Enlace para compartir',
   }
 }

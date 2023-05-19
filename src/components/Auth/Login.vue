@@ -84,13 +84,13 @@
           <q-inner-loading
             :showing="auth.user.loading"
             transition-duration="1000"
-          ></q-inner-loading>
+          />
         </q-card>
       </q-dialog>
       <q-inner-loading
         :showing="auth.user.loading"
         transition-duration="1000"
-      ></q-inner-loading>
+      />
     </q-card>
   </q-dialog>
 </template>

@@ -10,7 +10,7 @@
             {{ $t("edit") }}
           </q-item-section>
         </q-item>
-        <q-item clickable>
+        <q-item clickable @click="dialogShare = true">
           <q-item-section avatar>
             <q-icon name="ios_share" />
           </q-item-section>
@@ -23,6 +23,9 @@
     <q-dialog v-model="storedBook.dialogEdit" persistent>
       <EditForm :bookId="user.activeBook.id" />
     </q-dialog>
+    <q-dialog v-model="dialogShare" persistent>
+      <ShareDialog />
+    </q-dialog>
   </q-btn>
 </template>
 
@@ -30,18 +33,23 @@
 import { userStore } from "stores/user/";
 import { bookStore } from "stores/book/";
 import EditForm from "./Form.vue";
+import ShareDialog from "./Share.vue";
+import { ref } from "vue";
 
 export default {
   name: "book-menu",
   components: {
-    EditForm
+    EditForm,
+    ShareDialog
   },
   setup() {
     const user = userStore();
     const storedBook = bookStore();
+    const dialogShare = ref(false);
     return {
       user,
-      storedBook
+      storedBook,
+      dialogShare
     };
   }
 };
