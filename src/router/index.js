@@ -28,14 +28,13 @@ export default route(function (/* { store, ssrContext } */) {
   })
 
   Router.beforeEach((to, from, next) => {
-    // const auth = authStore()
-    // if (!auth.user?.uid && to.name !== 'Auth') {
-    //   console.log('no user', auth.user, to.name)
-    //   next({ name: 'Auth' })
-    // }
-    // else {
-    next()
-    // }
+    const auth = authStore()
+    if (auth.user?.uid && to.name === 'Auth') {
+      next({ name: 'Book' })
+    }
+    else {
+      next()
+    }
   })
 
   return Router

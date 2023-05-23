@@ -126,7 +126,7 @@ export default {
       if (!this.user?.uid && currentRoute.meta.requiresAuth) {
         this.router.push({ name: 'Auth' })
       } else if (this.user?.uid && currentRoute.name === 'Auth') {
-        const bookId = this.currentRoute.params.bookId || null
+        const bookId = currentRoute.params?.bookId || null
         this.router.push({ name: 'Book', params: { bookId } })
       }
     });

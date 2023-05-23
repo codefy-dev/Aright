@@ -5,13 +5,20 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
+        path: '',
+        redirect: to => {
+          // the function receives the target route as the argument
+          // we return a redirect path/location here.
+          return { path: '/Auth', query: { q: to.params.searchText } }
+        },
+      },
+      {
         path: 'book/:bookId?',
         component: () => import('pages/Book.vue'),
         name: 'Book',
         meta: {
           requiresAuth: true
-        },
-        alias: '' // alias until we have a default dashboard or something
+        }
       },
       {
         path: 'auth',
