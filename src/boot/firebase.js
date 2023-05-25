@@ -24,7 +24,8 @@ var firebaseConfig = {
   storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.FIREBASE_APP_ID,
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID,
+  dinamicLinksApi: process.env.FIREBASE_DINAMIC_LINKS_API
 };
 
 const firebaseActionCodeSettings = {
@@ -43,6 +44,17 @@ const firebaseActionCodeSettings = {
   dynamicLinkDomain: process.env.FIREBASE_DINAMIC_LINKS_DOMAIN
 };
 
+const firebaseDynamicLinkInfo = {
+  domainUriPrefix: process.env.FIREBASE_DINAMIC_LINKS_DOMAIN,
+  link: process.env.APP_URL,
+  androidInfo: {
+    androidPackageName: process.env.ANDROID_PACKAGE_NAME,
+    androidMinPackageVersionCode: '12'
+  },
+  iosInfo: {
+    iosBundleId: process.env.IOS_BUNDLE_ID
+  }
+};
 
 const firebaseApp = initializeApp(firebaseConfig)
 const firebaseAuth = getAuth(firebaseApp)
@@ -75,5 +87,6 @@ export {
   firebaseGoogleAuthProvider,
   firebaseSignInWithPopup,
   firebaseAppleOAuthProvider,
-  firebaseFacebookAuthProvider
+  firebaseFacebookAuthProvider,
+  firebaseDynamicLinkInfo
 }

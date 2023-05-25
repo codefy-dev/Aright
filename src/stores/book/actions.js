@@ -1,4 +1,4 @@
-import { firebaseDb } from '../../boot/firebase'
+import { firebaseDb, firebaseDynamicLinkInfo, firebaseConfig } from '../../boot/firebase'
 import { Loading, Screen, Notify, Dialog } from 'quasar'
 import { collection, query, getDocs, orderBy, addDoc, limit, startAfter, setDoc, doc, Timestamp } from "firebase/firestore";
 import { userStore } from '../user/index.js'
@@ -287,7 +287,11 @@ export default {
   async createDynamicLink () {
     const storedUser = userStore()
     let user = await storedUser.userInfo
-    const link = `${process.env.APP_URL}book/${user.activedBook}`
+    const link = `${firebaseDynamicLinkInfo.link}book/${user.activedBook}`
+    const dynamicLinkInfo = {
+      ...firebaseDynamicLinkInfo,
+      link
+    }
     console.log('createDynamicLink link', link)
     const requestOptions = {
       method: 'POST',
@@ -295,19 +299,10 @@ export default {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        "dynamicLinkInfo": {
-          "domainUriPrefix": process.env.FIREBASE_DINAMIC_LINKS_DOMAIN,
-          "link": link,
-          "androidInfo": {
-            "androidPackageName": process.env.ANDROID_PACKAGE_NAME
-          },
-          "iosInfo": {
-            "iosBundleId": process.env.IOS_BUNDLE_ID
-          }
-        }
+        dynamicLinkInfo
       })
     }
-    fetch(`${process.env.FIREBASE_DINAMIC_LINKS_API}?key=${process.env.FIREBASE_API_KEY}`, requestOptions)
+    fetch(`${firebaseConfig.dinamicLinksApi}?key=${firebaseConfig.apiKey}`, requestOptions)
       .then(async response => {
         console.log('createDynamicLink response', response, requestOptions)
         const data = await response.json();
