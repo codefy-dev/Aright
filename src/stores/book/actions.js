@@ -292,7 +292,6 @@ export default {
       ...firebaseDynamicLinkInfo,
       link
     }
-    console.log('createDynamicLink link', link)
     const requestOptions = {
       method: 'POST',
       headers: {
@@ -302,17 +301,17 @@ export default {
         dynamicLinkInfo
       })
     }
-    fetch(`${firebaseConfig.dinamicLinksApi}?key=${firebaseConfig.apiKey}`, requestOptions)
-      .then(async response => {
-        console.log('createDynamicLink response', response, requestOptions)
-        const data = await response.json();
-        if (!response.ok) {
-          const error = (data && data.message) || response.status;
-          return Promise.reject(error);
-        }
-        return data.shortLink;
-      }).catch(error => {
-        console.error('createDynamicLink error', error.code, error.message, error.status)
-      })
+    try {
+      const response = await fetch(`${firebaseConfig.dinamicLinksApi}?key=${firebaseConfig.apiKey}`, requestOptions)
+      if (!response.ok) {
+        const error = (data && data.message) || response.status;
+        throw new Error("Network response was not OK");
+      }
+      const data = await response.json();
+      return data.shortLink;
+    } catch (error) {
+      console.error('createDynamicLink error', error);
+      return 'Error'
+    }
   }
 }
