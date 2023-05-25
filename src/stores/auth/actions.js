@@ -71,7 +71,7 @@ export default {
     });
   },
   async sendSignInLink (payload) {
-    console.log('sendSignInLink', firebaseActionCodeSettings)
+    console.log('sendSignInLink', firebaseActionCodeSettings, process.env)
     await firebaseSendSignInLink(firebaseAuth, payload.email, firebaseActionCodeSettings).then(() => {
       window.localStorage.setItem('emailForSignIn', payload.email);
       Notify.create({
