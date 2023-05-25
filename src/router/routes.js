@@ -9,7 +9,7 @@ const routes = [
         redirect: to => {
           // the function receives the target route as the argument
           // we return a redirect path/location here.
-          return { path: '/Auth', query: { q: to.params.searchText } }
+          return { path: '/auth', query: { q: to.params.searchText } }
         },
       },
       {
