@@ -88,5 +88,6 @@ export {
   firebaseSignInWithPopup,
   firebaseAppleOAuthProvider,
   firebaseFacebookAuthProvider,
-  firebaseDynamicLinkInfo
+  firebaseDynamicLinkInfo,
+  firebaseConfig
 }
