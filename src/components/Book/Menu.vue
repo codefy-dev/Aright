@@ -23,7 +23,7 @@
     <q-dialog v-model="storedBook.dialogEdit" persistent>
       <EditForm :bookId="user.activeBook.id" />
     </q-dialog>
-    <q-dialog v-model="dialogShare" persistent>
+    <q-dialog v-model="dialogShare">
       <ShareDialog />
     </q-dialog>
   </q-btn>

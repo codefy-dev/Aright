@@ -77,10 +77,12 @@ export default {
     deleteLineMessage: 'Are you sure you want to delete this record? <br/> This action cannot be undone!',
     deleteLineSuccess: 'Record deleted successfully',
     share: 'Share',
+    shareBook: 'Share Book',
     memberAlreadyInUse: 'Name already in use',
     maxBooksMessage: 'You have reached the maximum number of books',
     membersIsRequired: 'The book must have at least one member',
     maxMembersMessage: 'The maximum number of members is {max}',
     linkToShare: 'Link to share',
+    linkCopied: 'Link copied to clipboard',
   }
 }

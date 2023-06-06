@@ -305,13 +305,13 @@ export default {
       const response = await fetch(`${firebaseConfig.dinamicLinksApi}?key=${firebaseConfig.apiKey}`, requestOptions)
       if (!response.ok) {
         const error = (data && data.message) || response.status;
-        throw new Error("Network response was not OK");
+        throw new Error("Network response was not OK " + error);
       }
       const data = await response.json();
       return data.shortLink;
     } catch (error) {
       console.error('createDynamicLink error', error);
-      return 'Error'
+      return null;
     }
   }
 }

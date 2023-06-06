@@ -83,5 +83,6 @@ export default {
     membersIsRequired: 'El libro debe tener al menos un miembro',
     maxMembersMessage: 'El máximo de miembros permitidos es {max}',
     linkToShare: 'Enlace para compartir',
+    linkCopied: 'Enlace copiado al portapapeles',
   }
 }

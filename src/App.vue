@@ -8,7 +8,6 @@ export default {
   name: "main-page",
   setup() {
     const auth = authStore();
-    console.log("auth", auth);
     auth.handleAuthStateChange();
   }
 };
