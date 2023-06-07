@@ -10,23 +10,23 @@ service cloud.firestore {
       function bookData() {
       	return get(/databases/$(database)/documents/books/$(bookID)).data;
       }
-      function readPermission (data) {
-      	return request.auth != null && request.auth.uid in data.members;
+      function readPermission () {
+      	return request.auth != null;
       }
-      function createPermission () {
-      	return request.auth != null && request.auth.uid == request.resource.data.created_by;
+      function createPermission (data) {
+      	return request.auth != null && request.auth.uid in data.members;
       }
       function updatePermission () {
       	return request.auth != null &&
       		     request.auth.uid == resource.data.created_by &&
                request.auth.uid == request.resource.data.created_by;
       }
-      allow read: if readPermission(resource.data);
-      allow create: if createPermission();
+      allow read: if readPermission();
+      //allow create: if createPermission(resource.data);
       allow update, delete: if updatePermission();
       match /lines/{lineID} {
-        allow read: if readPermission(bookData());
-      	allow create: if createPermission();
+        allow read: if readPermission();
+      	allow create: if createPermission(bookData());
       	allow update, delete: if updatePermission();
       }
     }
