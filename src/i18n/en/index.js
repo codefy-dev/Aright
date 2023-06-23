@@ -84,7 +84,6 @@ export default {
     maxMembersMessage: 'The maximum number of members is {max}',
     linkToShare: 'Link to share',
     linkCopied: 'Link copied to clipboard',
-    newReaderAddedSuccess: 'Welcome {name}! You have been added to the book {bookName}',
-    readerAlreadyAdded: 'You are already a member of this book',
+    newReaderAddedSuccess: 'Welcome! You have been added to this book'
   }
 }

@@ -84,7 +84,6 @@ export default {
     maxMembersMessage: 'El máximo de miembros permitidos es {max}',
     linkToShare: 'Enlace para compartir',
     linkCopied: 'Enlace copiado al portapapeles',
-    newReaderAddedSuccess: 'Bienvenido {displayName}, ahora eres miembro de {bookName}',
-    readerAlreadyAdded: 'Ya eres miembro de este libro',
+    newReaderAddedSuccess: 'Bienvenido, ahora eres miembro de este libro',
   }
 }

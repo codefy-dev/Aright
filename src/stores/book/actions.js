@@ -325,13 +325,7 @@ export default {
     const docSnap = await getDoc(booksUsersRef)
     if (docSnap.exists()) {
       let bookUser = docSnap.data()
-      if (bookUser.users[user.id]) {
-        Notify.create({
-          message: $t('book.readerAlreadyAdded'),
-          color: 'negative',
-          icon: 'error'
-        })
-      } else {
+      if (!bookUser.users[user.id]) {
         bookUser.users[user.id] = {
           created_at: Timestamp.now(),
           status: 'active',
