@@ -1,6 +1,6 @@
 import { firebaseDb, firebaseDynamicLinkInfo, firebaseConfig } from '../../boot/firebase'
 import { Loading, Screen, Notify, Dialog } from 'quasar'
-import { collection, query, getDocs, getDoc, orderBy, addDoc, limit, startAfter, setDoc, doc, Timestamp } from "firebase/firestore";
+import { collection, query, getDocs, getDoc, orderBy, addDoc, limit, startAfter, setDoc, doc, Timestamp, updateDoc } from "firebase/firestore";
 import { userStore } from '../user/index.js'
 import { i18n } from '../../boot/i18n';
 const $t = i18n.global.t;
@@ -18,11 +18,12 @@ export default {
     if (bookId && bookId !== user.activedBook) { // user comes from a shared link
       let bookRef = doc(firebaseDb, 'books', bookId)
       let book = await getDoc(bookRef)
-      if (book.empty || !book.data().members.includes(user.id)) {
-        console.log(book.data().members, book.data())
-        await this.addUserToBook(book.data())
+      if (book.data()) {
+        if ((book.empty || !book.data()?.members.includes(user.id))) {
+          await this.addUserToBook({ ...book.data(), id: bookId })
+        }
+        return await this.setActiveBook({ ...book.data(), id: bookId }, true)
       }
-      return await this.setActiveBook(bookId, true)
     }
     if (user.activedBook) {
       let booksRef = collection(firebaseDb, 'books', user.activedBook, 'lines')
@@ -77,8 +78,9 @@ export default {
     Loading.show()
     let booksCollection = collection(firebaseDb, 'books')
     let bookReff = await addDoc(booksCollection, newBook)
-    await this.addUserToBook(bookReff)
-    await this.setActiveBook({ ...newBook, id: bookReff.id }, false)
+    newBook = { ...newBook, id: bookReff.id }
+    await this.setActiveBook(newBook, false)
+    await this.addUserToBook(newBook)
     Notify.create({
       message: $t('book.addBookSuccess'),
       color: 'positive',
@@ -318,21 +320,53 @@ export default {
   async addUserToBook (book, user = null) {
     const storedUser = userStore()
     user = user || await storedUser.userInfo
-    let bookUser = {
-      created_at: Timestamp.now(),
-      book_id: book.id,
-      user_id: user.id,
-      status: 'active',
-      role: book.created_by === user.id ? 'admin' : 'reader',
-    }
-    let booksUsersCollection = collection(firebaseDb, 'book_users')
-    await addDoc(booksUsersCollection, bookUser)
-    if (book.created_by !== user.id) {
-      Notify.create({
-        message: $t('book.newReaderAddedSuccess'),
-        color: 'positive',
-        icon: 'check_circle'
-      })
+
+    let booksUsersRef = doc(firebaseDb, 'book_users', book.id)
+    const docSnap = await getDoc(booksUsersRef)
+    if (docSnap.exists()) {
+      let bookUser = docSnap.data()
+      if (bookUser.users[user.id]) {
+        Notify.create({
+          message: $t('book.readerAlreadyAdded'),
+          color: 'negative',
+          icon: 'error'
+        })
+      } else {
+        bookUser.users[user.id] = {
+          created_at: Timestamp.now(),
+          status: 'active',
+          role: 'reader'
+        }
+        await updateDoc(booksUsersRef, bookUser)
+        Notify.create({
+          message: $t('book.newReaderAddedSuccess'),
+          color: 'positive',
+          icon: 'check_circle'
+        })
+      }
+
+    } else {
+
+      let bookUser = {
+        created_at: Timestamp.now(),
+        created_by: book.created_by,
+        users: {
+          [user.id]: {
+            created_at: Timestamp.now(),
+            status: 'active',
+            role: book.created_by === user.id ? 'member' : 'reader'
+          }
+        },
+        members: book.members
+      }
+      await setDoc(booksUsersRef, bookUser)
+      if (book.created_by !== user.id) {
+        Notify.create({
+          message: $t('book.newReaderAddedSuccess'),
+          color: 'positive',
+          icon: 'check_circle'
+        })
+      }
     }
   }
 }

@@ -85,5 +85,6 @@ export default {
     linkToShare: 'Link to share',
     linkCopied: 'Link copied to clipboard',
     newReaderAddedSuccess: 'Welcome {name}! You have been added to the book {bookName}',
+    readerAlreadyAdded: 'You are already a member of this book',
   }
 }

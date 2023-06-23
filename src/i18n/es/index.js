@@ -85,5 +85,6 @@ export default {
     linkToShare: 'Enlace para compartir',
     linkCopied: 'Enlace copiado al portapapeles',
     newReaderAddedSuccess: 'Bienvenido {displayName}, ahora eres miembro de {bookName}',
+    readerAlreadyAdded: 'Ya eres miembro de este libro',
   }
 }
