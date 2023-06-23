@@ -17,6 +17,8 @@ import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { Notify, Dark } from 'quasar'
 import { i18n } from '../../boot/i18n';
 import md5 from 'md5'
+import { userStore } from '../user/index.js'
+import { bookStore } from '../book/index.js'
 
 const $t = i18n.global.t;
 
@@ -45,6 +47,7 @@ export default {
   async signInWithPopup (provider) {
     await firebaseSignInWithPopup(firebaseAuth, provider).then((result) => {
       this.user = result.user
+      this.redirectToBook()
       // Apple credential
       // const credential = OAuthProvider.credentialFromResult(result);
       // const accessToken = credential.accessToken;
@@ -96,6 +99,7 @@ export default {
       await firebaseSignInWithLink(firebaseAuth, email, window.location.href).then((result) => {
         window.localStorage.removeItem('emailForSignIn');
         this.user = result.user
+        this.redirectToBook()
         // You can access the new user via result.user
         // Additional user info profile not available via:
         // result.additionalUserInfo.profile == null
@@ -113,7 +117,12 @@ export default {
   },
   logout () {
     firebaseSignOut(firebaseAuth).then(() => {
-      this.user = {}
+      const storedUser = userStore()
+      const storedBook = bookStore()
+      storedUser.$reset()
+      storedBook.$reset()
+      this.$reset()
+      this.user = { loading: false }
     }).catch((error) => {
       console.error(error)
     });
@@ -198,5 +207,9 @@ export default {
     Dark.toggle()
     this.user.photoURL = this.updateParamsUrl(this.user.photoURL, { dark: !this.darkMode })
     this.updateProfile({ photoURL: this.user.photoURL })
+  },
+  redirectToBook (bookId) {
+    bookId = bookId || this.router.currentRoute.value.params?.bookId || null
+    this.router.push({ name: 'Book', params: { bookId } })
   }
 }
